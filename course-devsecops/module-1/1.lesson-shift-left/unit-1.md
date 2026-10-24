@@ -153,21 +153,44 @@ You ran your first vulnerability scan — security in action from minute one. �
 
 Culture is not a slide deck — it is a set of principles your team actually agrees to. Writing one down, in your own words, is how you internalize it.
 
-**Activity — Terminal (dev):** Create a short manifesto file. Write at least one principle that captures the Shift-Left idea (it must contain the word `shift`).
+You'll now create a small text file that captures your DevSecOps principles. It just needs to contain the word **shift** somewhere. Pick whichever of the two methods below feels comfortable — both produce the same result.
+
+> 💡 New to the terminal? That's fine — this course is for the whole IT team, not just engineers. Follow **Option A** exactly, or use the point-and-click **Option B**. You can't break anything.
+
+**Option A — Terminal (recommended, one line).** In the **Terminal (dev)** tab, copy the single line below, paste it, and press **Enter**. It writes the file for you in one go (no multi-line typing).
 
 ```bash
-# Create your own DevSecOps manifesto
-cat > /home/laborant/devsecops-manifesto.txt << 'EOF'
-Our DevSecOps principles:
-1. Shift-left: find and fix security issues as early as possible.
-2. Security is a shared responsibility, not a final gate.
-3. Automate every repeatable security check.
-4. Fast feedback in the pull request beats a slow audit nobody reads.
-EOF
+printf '%s\n' 'Our DevSecOps principles:' '1. Shift-left: find and fix security issues as early as possible.' '2. Security is a shared responsibility, not a final gate.' '3. Automate every repeatable security check.' > /home/laborant/devsecops-manifesto.txt
+```
 
-# Read it back
+Then confirm it was created by printing it back (optional):
+
+```bash
 cat /home/laborant/devsecops-manifesto.txt
 ```
+
+You should see the four lines you just wrote. If you do, you're done.
+
+::hint-box
+---
+:summary: Prefer not to use the terminal? Use the editor instead (Option B).
+---
+**Option B — VS Code editor (no terminal needed):**
+
+1. Open the **IDE** tab in your lab (that's the built-in VS Code editor).
+2. Create a new file: **File → New File**.
+3. Type a few lines of your own DevSecOps principles — just make sure **one line contains the word "shift"** (for example: _"Shift-left: catch security issues early."_).
+4. Save it: **File → Save**, and name it exactly `devsecops-manifesto.txt` in the `/home/laborant` folder.
+
+That's it — the check below will turn green either way.
+::
+
+::hint-box
+---
+:summary: Something went wrong / the terminal looks stuck on a ">" symbol?
+---
+If your terminal shows a lonely `>` on a new line, it's waiting for you to finish a command — just press **Ctrl + C** to cancel and start over with the one-line Option A command above (copy the whole line at once). Nothing is broken.
+::
 
 ::simple-task
 ---
@@ -175,7 +198,7 @@ cat /home/laborant/devsecops-manifesto.txt
 :name: verify_manifesto_file
 ---
 #active
-Create `/home/laborant/devsecops-manifesto.txt` containing at least one principle that includes the word **shift**.
+Create the file `/home/laborant/devsecops-manifesto.txt` (via Option A or Option B) containing at least one line with the word **shift**.
 
 #completed
 Your DevSecOps manifesto exists and captures the Shift-Left principle. ✓
