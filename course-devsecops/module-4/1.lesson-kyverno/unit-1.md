@@ -104,6 +104,13 @@ Kyverno is installed and running. ✓
 
 A Kyverno policy is a YAML object. This one *validates* every Pod and *denies* any that sets `privileged: true`.
 
+::hint-box
+---
+:summary: New to the terminal? Read this once (applies to every paste in this course).
+---
+Some activities paste a multi-line block into the terminal. **Copy the whole block at once** (from the first line through the final `EOF`) and press Enter — it runs as a single step. If your terminal ends up showing a lonely `>` on a new line, it's just waiting for the rest of an unfinished command: press **Ctrl + C** to cancel and paste the full block again. You can't break anything, and you can always re-run a step.
+::
+
 **Activity — Terminal (dev):** Create and apply the policy in enforce mode.
 
 ```bash

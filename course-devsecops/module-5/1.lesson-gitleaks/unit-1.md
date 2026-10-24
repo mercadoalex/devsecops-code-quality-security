@@ -41,6 +41,13 @@ No — and this is critical. Once a secret is committed and pushed, you must **t
 
 ## 1. Create a repo with a leaked secret
 
+::hint-box
+---
+:summary: New to the terminal? Read this once (applies to every paste in this course).
+---
+Some activities paste a multi-line block into the terminal. **Copy the whole block at once** (from the first line through the final `EOF`) and press Enter — it runs as a single step. If your terminal ends up showing a lonely `>` on a new line, it's just waiting for the rest of an unfinished command: press **Ctrl + C** to cancel and paste the full block again. You can't break anything, and you can always re-run a step.
+::
+
 **Activity — Terminal (dev):** Build a tiny repo, commit a fake AWS key, then "remove" it in a later commit — exactly the real-world mistake.
 
 ```bash
