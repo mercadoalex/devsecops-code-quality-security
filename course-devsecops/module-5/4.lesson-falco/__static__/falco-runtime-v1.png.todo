@@ -1,6 +1,43 @@
-Diagram: a running container issues syscalls to the Linux kernel; Falco taps the
-syscall stream via an eBPF probe, evaluates each event against rules, and emits an
-alert on match — example alert box "Warning: shell spawned in container
-(user=root shell=bash container=app)". A timeline shows pre-deploy controls
-(scan, policy, sign) ending at deploy, and Falco covering the runtime period
-after. Flat style. max-width 860px.
+=== READY-TO-PASTE GEMINI PROMPT (copy everything below the line) ===
+Style contract: .kiro/steering/devsecops-image-style.md
+Save the result as this file's name without ".todo": falco-runtime-v1.png
+----------------------------------------------------------------------
+A clean, modern technical infographic for an enterprise DevSecOps course.
+Institutional, precise, calm, authoritative mood — security shown as good
+engineering, never as threat.
+
+IMPORTANT: do NOT render any title, heading, sub-heading, or course name inside
+the image. Draw ONLY the short labels listed below. No sentences anywhere.
+Do NOT draw fire, flames, embers, hooded hackers, or skulls.
+
+SUBJECT: Falco taps the kernel syscall stream at runtime and raises an alert when
+behavior matches a rule — the control that covers the period after deploy.
+
+ELEMENTS: a running-container node issues a few downward "syscalls" arrows to a
+horizontal "kernel" bar; a "Falco" node taps that stream via a small "eBPF" probe
+and matches a stacked "rules" card; an alert card emerges to the side (a calm
+notice badge, not alarmist). Along the bottom, a thin timeline strip shows
+pre-deploy controls (scan, policy, sign) ending at a "Deploy" marker and a
+highlighted "Runtime" segment after it that Falco covers.
+
+LABELS (the ONLY text in the image — short, exact): Container, syscalls, kernel,
+Falco, eBPF, rules, alert, Deploy, Runtime.
+
+Visual language: flat-vector meets soft 3D, clean geometric shapes, rounded
+corners, subtle depth and soft shadows. Security motifs are shields, check
+badges, gates, and padlock-with-checkmark icons.
+
+Color palette: soft light background (white or very light blue-grey); deep NAVY
+and TEAL as the base; CYAN highlights; EMERALD-GREEN accents. Use a restrained
+amber/red only for the single alert badge — never as a general alarm wash.
+
+Composition: one clear subject, generous negative space, balanced, crisp edges,
+no grain. 16:9 landscape.
+
+Strictly avoid: ANY title or heading text in the image; fire, flames, embers,
+glowing heat; cartoonish or mascot elements; neon colors; organic textures;
+hand-drawn or sketchy feel; hand-made or decorative typography; watermarks;
+agency seals; rank insignia; decorative borders; readable paragraphs or gibberish
+text; skulls; hooded hackers; matrix rain; glitch; warning-triangle spam.
+
+High detail, professional, enterprise-grade. Aspect ratio 16:9.

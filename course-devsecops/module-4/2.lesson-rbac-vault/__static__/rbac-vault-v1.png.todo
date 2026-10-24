@@ -1,5 +1,44 @@
-Two-panel diagram. Left "RBAC": a ServiceAccount bound via RoleBinding to a Role
-allowing only get/list/watch on pods in the dev namespace; red X over attempts to
-read secrets or act in other namespaces. Right "Secrets": an app requests a DB
-password from a central Vault server, which checks a policy and returns it —
-instead of the password hard-coded in a YAML manifest. Flat style. max-width 860px.
+=== READY-TO-PASTE GEMINI PROMPT (copy everything below the line) ===
+Style contract: .kiro/steering/devsecops-image-style.md
+Save the result as this file's name without ".todo": rbac-vault-v1.png
+----------------------------------------------------------------------
+A clean, modern technical infographic for an enterprise DevSecOps course.
+Institutional, precise, calm, authoritative mood — security shown as good
+engineering, never as threat.
+
+IMPORTANT: do NOT render any title, heading, sub-heading, or course name inside
+the image. Draw ONLY the short labels listed below. No sentences anywhere.
+Do NOT draw fire, flames, embers, hooded hackers, or skulls.
+
+SUBJECT: two complementary access controls — least-privilege RBAC (left) and
+centralized secrets with Vault (right).
+
+ELEMENTS: a two-panel layout. Left panel "RBAC": a ServiceAccount icon connected
+through a RoleBinding to a Role that allows only get/list/watch on pods in the
+"dev" namespace; a small red X over an attempt to read secrets or reach other
+namespaces. Right panel "Vault": an app icon requesting a database password from
+a central Vault node that checks a policy and returns it; alongside, a crossed-out
+YAML file showing a hard-coded password is the wrong way.
+
+LABELS (the ONLY text in the image — short, exact): RBAC, ServiceAccount, Role,
+get/list/watch, denied, Vault, db_password, no hard-coded secrets.
+
+Visual language: flat-vector meets soft 3D, clean geometric shapes, rounded
+corners, subtle depth and soft shadows. Security motifs are shields, check
+badges, gates, and padlock-with-checkmark icons.
+
+Color palette: soft light background (white or very light blue-grey); deep NAVY
+and TEAL as the base; CYAN highlights; EMERALD-GREEN success accents. Use RED
+only for the "denied" X and the crossed-out YAML — a flat color, never an alarm
+wash.
+
+Composition: one clear subject, generous negative space, balanced, crisp edges,
+no grain. 16:9 landscape.
+
+Strictly avoid: ANY title or heading text in the image; fire, flames, embers,
+glowing heat; cartoonish or mascot elements; neon colors; organic textures;
+hand-drawn or sketchy feel; hand-made or decorative typography; watermarks;
+agency seals; rank insignia; decorative borders; readable paragraphs or gibberish
+text; skulls; hooded hackers; matrix rain; glitch; warning-triangle spam.
+
+High detail, professional, enterprise-grade. Aspect ratio 16:9.

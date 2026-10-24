@@ -1,6 +1,44 @@
-Horizontal pipeline with six gates left to right, each a box with its tool and a
-pass/fail gate symbol: 1 Secret scan (Gitleaks), 2 SAST (Semgrep), 3 Image CVE
-scan (Trivy), 4 SBOM (Trivy), 5 Sign (cosign), 6 Admission policy (Kyverno
-verifyImages). A commit enters on the left; only a signed, policy-compliant
-deployment exits on the right into a prod namespace. Any failing gate stops the
-flow with a red X. Flat style. max-width 900px.
+=== READY-TO-PASTE GEMINI PROMPT (copy everything below the line) ===
+Style contract: .kiro/steering/devsecops-image-style.md
+Save the result as this file's name without ".todo": pipeline-end-to-end-v1.png
+----------------------------------------------------------------------
+A clean, modern technical infographic for an enterprise DevSecOps course.
+Institutional, precise, calm, authoritative mood — security shown as good
+engineering, never as threat.
+
+IMPORTANT: do NOT render any title, heading, sub-heading, or course name inside
+the image. Draw ONLY the short labels listed below. No sentences anywhere.
+Do NOT draw fire, flames, embers, hooded hackers, or skulls.
+
+SUBJECT: the full end-to-end DevSecOps pipeline — six security gates in sequence
+from commit to a policy-admitted deploy.
+
+ELEMENTS: a source-code "{ }" chip enters at the far left and flows left to right
+through six sequential numbered gate nodes, each a rounded box with one simple
+tool icon and a small pass/fail gate symbol. After the sixth gate, a verified
+container with a padlock-and-check badge exits into a "prod" namespace cloud on
+the right. One dropped red branch off a gate shows that any failing gate stops
+the flow. Clean single horizontal flow.
+
+LABELS (the ONLY text in the image — short, exact): commit, 1 Gitleaks,
+2 Semgrep, 3 Trivy CVE, 4 Trivy SBOM, 5 cosign, 6 Kyverno, prod.
+
+Visual language: flat-vector meets soft 3D, clean geometric shapes, rounded
+corners, subtle depth and soft shadows. Security motifs are shields, check
+badges, gates, and padlock-with-checkmark icons.
+
+Color palette: soft light background (white or very light blue-grey); deep NAVY
+and TEAL as the base; CYAN highlights; EMERALD-GREEN success accents. Use RED
+only for the single "failing gate stops the flow" branch — a flat color, never an
+alarm wash.
+
+Composition: one clear subject, generous negative space, balanced, crisp edges,
+no grain. 16:9 landscape.
+
+Strictly avoid: ANY title or heading text in the image; fire, flames, embers,
+glowing heat; cartoonish or mascot elements; neon colors; organic textures;
+hand-drawn or sketchy feel; hand-made or decorative typography; watermarks;
+agency seals; rank insignia; decorative borders; readable paragraphs or gibberish
+text; skulls; hooded hackers; matrix rain; glitch; warning-triangle spam.
+
+High detail, professional, enterprise-grade. Aspect ratio 16:9.

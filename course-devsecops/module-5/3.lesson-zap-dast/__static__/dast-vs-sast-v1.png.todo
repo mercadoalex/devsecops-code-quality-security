@@ -1,5 +1,43 @@
-Split diagram. Left "SAST": magnifying glass over source-code files, labelled
-"reads the code, before running". Right "DAST": OWASP ZAP sending HTTP attack
-requests (XSS payload, header checks, injection) at a running web app and reading
-responses, labelled "attacks the running app, black box". Center note:
-"complementary — run both". Flat style. max-width 860px.
+=== READY-TO-PASTE GEMINI PROMPT (copy everything below the line) ===
+Style contract: .kiro/steering/devsecops-image-style.md
+Save the result as this file's name without ".todo": dast-vs-sast-v1.png
+----------------------------------------------------------------------
+A clean, modern technical infographic for an enterprise DevSecOps course.
+Institutional, precise, calm, authoritative mood — security shown as good
+engineering, never as threat.
+
+IMPORTANT: do NOT render any title, heading, sub-heading, or course name inside
+the image. Draw ONLY the short labels listed below. No sentences anywhere.
+Do NOT draw fire, flames, embers, hooded hackers, or skulls.
+
+SUBJECT: SAST reads code at rest; DAST attacks the running app — the two are
+complementary.
+
+ELEMENTS: a two-panel split. Left panel "SAST": a magnifying glass over
+source-code file icons, with a small tag "reads the code". Right panel "DAST": a
+"ZAP" node sending a few HTTP request arrows (one tagged as a header check, one
+as an injection probe) at a running web-app server node and reading responses,
+with a tag "attacks the running app". A short center bridge element reads
+"run both".
+
+LABELS (the ONLY text in the image — short, exact): SAST, reads the code, DAST,
+attacks the running app, run both.
+
+Visual language: flat-vector meets soft 3D, clean geometric shapes, rounded
+corners, subtle depth and soft shadows. Security motifs are shields, check
+badges, gates, and padlock-with-checkmark icons.
+
+Color palette: soft light background (white or very light blue-grey); deep NAVY
+and TEAL as the base; CYAN highlights; EMERALD-GREEN accents. Use RED sparingly,
+only on an attack-probe arrow if needed — never as a general alarm wash.
+
+Composition: one clear subject, generous negative space, balanced, crisp edges,
+no grain. 16:9 landscape.
+
+Strictly avoid: ANY title or heading text in the image; fire, flames, embers,
+glowing heat; cartoonish or mascot elements; neon colors; organic textures;
+hand-drawn or sketchy feel; hand-made or decorative typography; watermarks;
+agency seals; rank insignia; decorative borders; readable paragraphs or gibberish
+text; skulls; hooded hackers; matrix rain; glitch; warning-triangle spam.
+
+High detail, professional, enterprise-grade. Aspect ratio 16:9.

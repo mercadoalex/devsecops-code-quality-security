@@ -1,4 +1,41 @@
-Before/after split. Left "Risky": Dockerfile with FROM ubuntu, many apt installs,
-no USER, hard-coded API key — red warning icons. Right "Hardened": FROM
-python:3.12-slim (pinned), created non-root appuser, USER appuser, secret from
-runtime — green checks. Flat style. max-width 860px.
+=== READY-TO-PASTE GEMINI PROMPT (copy everything below the line) ===
+Style contract: .kiro/steering/devsecops-image-style.md
+Save the result as this file's name without ".todo": docker-hardening-checklist-v1.png
+----------------------------------------------------------------------
+A clean, modern technical infographic for an enterprise DevSecOps course.
+Institutional, precise, calm, authoritative mood — security shown as good
+engineering, never as threat.
+
+IMPORTANT: do NOT render any title, heading, sub-heading, or course name inside
+the image. Draw ONLY the short labels listed below. No sentences anywhere.
+Do NOT draw fire, flames, embers, hooded hackers, or skulls.
+
+SUBJECT: a risky container image configuration vs a hardened one, side by side.
+
+ELEMENTS: a two-card before/after split. Left card "Risky": three stacked items
+each with a small red marker — a fat base image, no non-root user, a baked-in
+secret. Right card "Hardened": three stacked items each with an emerald check —
+a slim pinned base, a non-root user, a secret injected at runtime. Clean,
+symmetrical layout.
+
+LABELS (the ONLY text in the image — short, exact): Risky, Hardened, fat base,
+no USER, baked secret, slim base, non-root, runtime secret.
+
+Visual language: flat-vector meets soft 3D, clean geometric shapes, rounded
+corners, subtle depth and soft shadows. Security motifs are shields, check
+badges, gates, and padlock-with-checkmark icons.
+
+Color palette: soft light background (white or very light blue-grey); deep NAVY
+and TEAL as the base; CYAN highlights; EMERALD-GREEN success accents. Use RED
+only for the three "Risky" markers — a flat color, never an alarm wash.
+
+Composition: one clear subject, generous negative space, balanced, crisp edges,
+no grain. 16:9 landscape.
+
+Strictly avoid: ANY title or heading text in the image; fire, flames, embers,
+glowing heat; cartoonish or mascot elements; neon colors; organic textures;
+hand-drawn or sketchy feel; hand-made or decorative typography; watermarks;
+agency seals; rank insignia; decorative borders; readable paragraphs or gibberish
+text; skulls; hooded hackers; matrix rain; glitch; warning-triangle spam.
+
+High detail, professional, enterprise-grade. Aspect ratio 16:9.

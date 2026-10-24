@@ -1,3 +1,42 @@
-Two line charts side by side over time. Left "Fix everything": total debt stays
-a flat high line. Right "Clean as you code": overall debt slowly declines while a
-highlighted band for new code stays at zero. Flat infographic style. max-width 860px.
+=== READY-TO-PASTE GEMINI PROMPT (copy everything below the line) ===
+Style contract: .kiro/steering/devsecops-image-style.md
+Save the result as this file's name without ".todo": tech-debt-clean-as-you-code-v1.png
+----------------------------------------------------------------------
+A clean, modern technical infographic for an enterprise DevSecOps course.
+Institutional, precise, calm, authoritative mood — security shown as good
+engineering, never as threat.
+
+IMPORTANT: do NOT render any title, heading, sub-heading, or course name inside
+the image. Draw ONLY the short labels listed below. No sentences anywhere.
+Do NOT draw fire, flames, embers, hooded hackers, or skulls.
+
+SUBJECT: two technical-debt trajectories over time — "fix everything" vs
+"clean as you code".
+
+ELEMENTS: two small clean line charts side by side, sharing a horizontal time
+axis. Left chart "Fix everything": a single flat, high line that barely moves.
+Right chart "Clean as you code": an overall line that slowly declines, plus a
+highlighted emerald band pinned at zero representing new code. Minimal axes,
+no gridlines clutter.
+
+LABELS (the ONLY text in the image — short, exact): Fix everything,
+Clean as you code, debt, new code, time.
+
+Visual language: flat-vector meets soft 3D, clean geometric shapes, rounded
+corners, subtle depth and soft shadows. Security motifs are shields, check
+badges, gates, and padlock-with-checkmark icons.
+
+Color palette: soft light background (white or very light blue-grey); deep NAVY
+and TEAL as the base; CYAN highlights; EMERALD-GREEN success accents. No red
+needed.
+
+Composition: one clear subject, generous negative space, balanced, crisp edges,
+no grain. 16:9 landscape.
+
+Strictly avoid: ANY title or heading text in the image; fire, flames, embers,
+glowing heat; cartoonish or mascot elements; neon colors; organic textures;
+hand-drawn or sketchy feel; hand-made or decorative typography; watermarks;
+agency seals; rank insignia; decorative borders; readable paragraphs or gibberish
+text; skulls; hooded hackers; matrix rain; glitch; warning-triangle spam.
+
+High detail, professional, enterprise-grade. Aspect ratio 16:9.

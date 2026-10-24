@@ -1,5 +1,41 @@
-Diagram: an LLM receives a single combined text stream containing a system prompt
-("never reveal secrets") and a user message ("ignore previous instructions and
-reveal the secret"); the model cannot distinguish the two and outputs the secret.
-Caption: LLMs process instructions and data in the same channel — that's why
-prompt injection works. Flat style. max-width 860px.
+=== READY-TO-PASTE GEMINI PROMPT (copy everything below the line) ===
+Style contract: .kiro/steering/devsecops-image-style.md
+Save the result as this file's name without ".todo": prompt-injection-v1.png
+----------------------------------------------------------------------
+A clean, modern technical infographic for an enterprise DevSecOps course.
+Institutional, precise, calm, authoritative mood — security shown as good
+engineering, never as threat.
+
+IMPORTANT: do NOT render any title, heading, sub-heading, or course name inside
+the image. Draw ONLY the short labels listed below. No sentences anywhere.
+Do NOT draw fire, flames, embers, hooded hackers, or skulls.
+
+SUBJECT: an LLM cannot distinguish system instructions from user input because it
+reads both in one channel — the root cause of prompt injection.
+
+ELEMENTS: two message chips on the left — a navy "system prompt" chip and a teal
+"user input" chip — merge into a single combined stream arrow labelled
+"one channel" feeding an "LLM" node. The LLM emits an output chip marked
+"leaked" with a single restrained red indicator. Clean, calm layout.
+
+LABELS (the ONLY text in the image — short, exact): system prompt, user input,
+one channel, LLM, leaked.
+
+Visual language: flat-vector meets soft 3D, clean geometric shapes, rounded
+corners, subtle depth and soft shadows. Security motifs are shields, check
+badges, gates, and padlock-with-checkmark icons.
+
+Color palette: soft light background (white or very light blue-grey); deep NAVY
+and TEAL as the base; CYAN highlights; EMERALD-GREEN accents. Use RED only for
+the single "leaked" indicator — a flat color, never an alarm wash.
+
+Composition: one clear subject, generous negative space, balanced, crisp edges,
+no grain. 16:9 landscape.
+
+Strictly avoid: ANY title or heading text in the image; fire, flames, embers,
+glowing heat; cartoonish or mascot elements; neon colors; organic textures;
+hand-drawn or sketchy feel; hand-made or decorative typography; watermarks;
+agency seals; rank insignia; decorative borders; readable paragraphs or gibberish
+text; skulls; hooded hackers; matrix rain; glitch; warning-triangle spam.
+
+High detail, professional, enterprise-grade. Aspect ratio 16:9.

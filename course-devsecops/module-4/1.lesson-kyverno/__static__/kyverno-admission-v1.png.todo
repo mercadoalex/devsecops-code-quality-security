@@ -1,4 +1,43 @@
-Diagram: kubectl apply -> Kubernetes API server -> Kyverno admission webhook.
-Kyverno evaluates the object against ClusterPolicies and returns allow/deny.
-Allowed -> written to etcd and scheduled. Denied -> rejected with an error shown
-back to the user (pod never created). Flat style. max-width 860px.
+=== READY-TO-PASTE GEMINI PROMPT (copy everything below the line) ===
+Style contract: .kiro/steering/devsecops-image-style.md
+Save the result as this file's name without ".todo": kyverno-admission-v1.png
+----------------------------------------------------------------------
+A clean, modern technical infographic for an enterprise DevSecOps course.
+Institutional, precise, calm, authoritative mood — security shown as good
+engineering, never as threat.
+
+IMPORTANT: do NOT render any title, heading, sub-heading, or course name inside
+the image. Draw ONLY the short labels listed below. No sentences anywhere.
+Do NOT draw fire, flames, embers, hooded hackers, or skulls.
+
+SUBJECT: Kubernetes admission control with Kyverno allowing or denying a workload
+before it is ever persisted to the cluster.
+
+ELEMENTS: a left-to-right flow — a "kubectl apply" icon sends an object to an
+"API server" node, which calls out to a "Kyverno" admission-webhook node that
+evaluates the object against a stacked "ClusterPolicy" card. Two outgoing paths
+fork from Kyverno: an ALLOW path in emerald green leading to an etcd cylinder and
+a scheduled pod, and a DENY path in red returning a rejection badge to the user
+with no pod created. Clean directional arrows, one clear flow.
+
+LABELS (the ONLY text in the image — short, exact): kubectl apply, API server,
+Kyverno, ClusterPolicy, ALLOW, DENY, etcd.
+
+Visual language: flat-vector meets soft 3D, clean geometric shapes, rounded
+corners, subtle depth and soft shadows. Security motifs are shields, check
+badges, gates, and padlock-with-checkmark icons.
+
+Color palette: soft light background (white or very light blue-grey); deep NAVY
+and TEAL as the base; CYAN highlights; EMERALD-GREEN success accents. Use RED
+only for the DENY path / rejection badge — a flat color, never an alarm wash.
+
+Composition: one clear subject, generous negative space, balanced, crisp edges,
+no grain. 16:9 landscape.
+
+Strictly avoid: ANY title or heading text in the image; fire, flames, embers,
+glowing heat; cartoonish or mascot elements; neon colors; organic textures;
+hand-drawn or sketchy feel; hand-made or decorative typography; watermarks;
+agency seals; rank insignia; decorative borders; readable paragraphs or gibberish
+text; skulls; hooded hackers; matrix rain; glitch; warning-triangle spam.
+
+High detail, professional, enterprise-grade. Aspect ratio 16:9.

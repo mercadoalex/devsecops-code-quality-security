@@ -1,4 +1,40 @@
-Container image shown as a box being X-rayed, revealing an inventory to its right
-titled "SBOM" with columns name/version/license (openssl 3.0.11, python 3.12.1,
-libc 2.36). Note: same SBOM can be re-scanned against new CVEs without rebuilding.
-Flat style. max-width 860px.
+=== READY-TO-PASTE GEMINI PROMPT (copy everything below the line) ===
+Style contract: .kiro/steering/devsecops-image-style.md
+Save the result as this file's name without ".todo": sbom-concept-v1.png
+----------------------------------------------------------------------
+A clean, modern technical infographic for an enterprise DevSecOps course.
+Institutional, precise, calm, authoritative mood — security shown as good
+engineering, never as threat.
+
+IMPORTANT: do NOT render any title, heading, sub-heading, or course name inside
+the image. Draw ONLY the short labels listed below. No sentences anywhere.
+Do NOT draw fire, flames, embers, hooded hackers, or skulls.
+
+SUBJECT: a software bill of materials as an itemized inventory of everything
+inside a container image.
+
+ELEMENTS: a container-image box on the left shown semi-transparent ("X-rayed")
+revealing a few stacked component chips inside; an arrow to an inventory panel on
+the right titled "SBOM" with three columns — name, version, license — and a few
+rows. A small circular re-scan arrow near the panel labelled "re-scan".
+
+LABELS (the ONLY text in the image — short, exact): Image, SBOM, name, version,
+license, re-scan.
+
+Visual language: flat-vector meets soft 3D, clean geometric shapes, rounded
+corners, subtle depth and soft shadows. Security motifs are shields, check
+badges, gates, and padlock-with-checkmark icons.
+
+Color palette: soft light background (white or very light blue-grey); deep NAVY
+and TEAL as the base; CYAN highlights; EMERALD-GREEN accents. No red needed.
+
+Composition: one clear subject, generous negative space, balanced, crisp edges,
+no grain. 16:9 landscape.
+
+Strictly avoid: ANY title or heading text in the image; fire, flames, embers,
+glowing heat; cartoonish or mascot elements; neon colors; organic textures;
+hand-drawn or sketchy feel; hand-made or decorative typography; watermarks;
+agency seals; rank insignia; decorative borders; readable paragraphs or gibberish
+text; skulls; hooded hackers; matrix rain; glitch; warning-triangle spam.
+
+High detail, professional, enterprise-grade. Aspect ratio 16:9.

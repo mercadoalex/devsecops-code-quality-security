@@ -1,4 +1,0 @@
-Flow diagram: container image (left) -> Trivy (center) cross-referencing two
-boxes "OS packages" and "language dependencies" against a "vulnerability DB (CVEs)"
--> report (right) listing findings grouped by severity CRITICAL/HIGH/MEDIUM/LOW.
-Flat style. max-width 860px.

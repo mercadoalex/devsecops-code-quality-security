@@ -1,5 +1,43 @@
-Git commit history as a horizontal chain. An API key appears at commit 2, is
-"removed" at commit 4 (strikethrough in working tree), but a magnifying glass
-labelled Gitleaks inspects the full chain and highlights the secret still present
-in commit 2's diff. Caption: deleting a file does not remove it from history.
-Flat style. max-width 860px.
+=== READY-TO-PASTE GEMINI PROMPT (copy everything below the line) ===
+Style contract: .kiro/steering/devsecops-image-style.md
+Save the result as this file's name without ".todo": gitleaks-history-v1.png
+----------------------------------------------------------------------
+A clean, modern technical infographic for an enterprise DevSecOps course.
+Institutional, precise, calm, authoritative mood — security shown as good
+engineering, never as threat.
+
+IMPORTANT: do NOT render any title, heading, sub-heading, or course name inside
+the image. Draw ONLY the short labels listed below. No sentences anywhere.
+Do NOT draw fire, flames, embers, hooded hackers, or skulls.
+
+SUBJECT: a secret stays in Git history even after it is "removed" in a later
+commit.
+
+ELEMENTS: a horizontal chain of four commit nodes connected by a line. A small
+key icon appears at commit 2. At commit 4, a working-tree copy of the key is
+shown struck through (removed). A magnifying-glass "Gitleaks" node inspects the
+whole chain and highlights the key still present at commit 2 with an emphasis
+ring.
+
+LABELS (the ONLY text in the image — short, exact): commit 1, commit 2,
+commit 3, commit 4, Gitleaks, still in history.
+
+Visual language: flat-vector meets soft 3D, clean geometric shapes, rounded
+corners, subtle depth and soft shadows. Security motifs are shields, check
+badges, gates, and padlock-with-checkmark icons.
+
+Color palette: soft light background (white or very light blue-grey); deep NAVY
+and TEAL as the base; CYAN highlights; EMERALD-GREEN accents. Use RED only to
+emphasize the still-present secret at commit 2 — a flat color, never an alarm
+wash.
+
+Composition: one clear subject, generous negative space, balanced, crisp edges,
+no grain. 16:9 landscape.
+
+Strictly avoid: ANY title or heading text in the image; fire, flames, embers,
+glowing heat; cartoonish or mascot elements; neon colors; organic textures;
+hand-drawn or sketchy feel; hand-made or decorative typography; watermarks;
+agency seals; rank insignia; decorative borders; readable paragraphs or gibberish
+text; skulls; hooded hackers; matrix rain; glitch; warning-triangle spam.
+
+High detail, professional, enterprise-grade. Aspect ratio 16:9.

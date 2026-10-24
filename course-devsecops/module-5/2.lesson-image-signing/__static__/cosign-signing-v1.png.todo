@@ -1,4 +1,42 @@
-Diagram: CI pipeline builds an image; cosign produces a signature stored next to
-the image in the registry. At deploy time the cluster pulls the image and a
-Kyverno verifyImages policy checks the signature against a trusted public key —
-admit if valid, reject if missing/invalid. Flat style. max-width 860px.
+=== READY-TO-PASTE GEMINI PROMPT (copy everything below the line) ===
+Style contract: .kiro/steering/devsecops-image-style.md
+Save the result as this file's name without ".todo": cosign-signing-v1.png
+----------------------------------------------------------------------
+A clean, modern technical infographic for an enterprise DevSecOps course.
+Institutional, precise, calm, authoritative mood — security shown as good
+engineering, never as threat.
+
+IMPORTANT: do NOT render any title, heading, sub-heading, or course name inside
+the image. Draw ONLY the short labels listed below. No sentences anywhere.
+Do NOT draw fire, flames, embers, hooded hackers, or skulls.
+
+SUBJECT: signing an image at build time and verifying its signature at deploy
+(admission) time.
+
+ELEMENTS: a left-to-right flow — a "CI build" node produces an image; a "cosign"
+node attaches a signature chip stored beside the image in a "registry" cylinder.
+At deploy, the cluster pulls the image and a "verifyImages" node checks the
+signature against a "trusted key"; two forks: ADMIT (emerald check) for a valid
+signature and REJECT (red) for missing/tampered.
+
+LABELS (the ONLY text in the image — short, exact): CI build, cosign, signature,
+registry, verifyImages, trusted key, ADMIT, REJECT.
+
+Visual language: flat-vector meets soft 3D, clean geometric shapes, rounded
+corners, subtle depth and soft shadows. Security motifs are shields, check
+badges, gates, and padlock-with-checkmark icons.
+
+Color palette: soft light background (white or very light blue-grey); deep NAVY
+and TEAL as the base; CYAN highlights; EMERALD-GREEN success accents. Use RED
+only for the REJECT fork — a flat color, never an alarm wash.
+
+Composition: one clear subject, generous negative space, balanced, crisp edges,
+no grain. 16:9 landscape.
+
+Strictly avoid: ANY title or heading text in the image; fire, flames, embers,
+glowing heat; cartoonish or mascot elements; neon colors; organic textures;
+hand-drawn or sketchy feel; hand-made or decorative typography; watermarks;
+agency seals; rank insignia; decorative borders; readable paragraphs or gibberish
+text; skulls; hooded hackers; matrix rain; glitch; warning-triangle spam.
+
+High detail, professional, enterprise-grade. Aspect ratio 16:9.
