@@ -69,3 +69,7 @@ labctl playground update <k8s-suffixed-name> -f playground/devsecops-k8s/manifes
 
 Course content © its author. Tools referenced are under their own licenses
 (see each lesson's "Tool & license" box).
+
+---
+
+Made with ❤️ by Alex
