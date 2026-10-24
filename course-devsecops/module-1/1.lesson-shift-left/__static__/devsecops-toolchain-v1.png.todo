@@ -1,0 +1,4 @@
+Pipeline diagram, commit flowing left to right through stages with the tool at
+each stage labelled: Code (SonarQube SAST), Build (Trivy image scan + SBOM),
+CI (Gitleaks secret scan + image signing), Deploy (Argo CD GitOps + Kyverno
+policy), Runtime (Falco detection). Flat icons, one control per stage. max-width 860px.

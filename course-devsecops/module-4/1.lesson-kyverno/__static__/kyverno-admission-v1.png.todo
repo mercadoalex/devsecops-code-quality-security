@@ -1,0 +1,4 @@
+Diagram: kubectl apply -> Kubernetes API server -> Kyverno admission webhook.
+Kyverno evaluates the object against ClusterPolicies and returns allow/deny.
+Allowed -> written to etcd and scheduled. Denied -> rejected with an error shown
+back to the user (pod never created). Flat style. max-width 860px.

@@ -1,0 +1,25 @@
+# Exclude from the COURSE push.
+#
+# Challenges are separate top-level content (kind: challenge), created and pushed
+# independently with `labctl content push -f challenge <slug> -d challenges/<name>`.
+# They must NOT be uploaded as part of the course (kind: course), or the platform
+# rejects them with "Content kind course does not support files with kind challenge".
+challenges/
+
+# Authoring/build docs — not course content.
+BUILD_NOTES.md
+
+# VCS / editor / OS noise
+.git/
+.gitignore
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+Thumbs.db
+
+# Secrets / local env (safety)
+.env
+*.pem
+*.key

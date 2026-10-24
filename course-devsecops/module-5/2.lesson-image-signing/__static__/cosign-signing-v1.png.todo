@@ -1,0 +1,4 @@
+Diagram: CI pipeline builds an image; cosign produces a signature stored next to
+the image in the registry. At deploy time the cluster pulls the image and a
+Kyverno verifyImages policy checks the signature against a trusted public key —
+admit if valid, reject if missing/invalid. Flat style. max-width 860px.

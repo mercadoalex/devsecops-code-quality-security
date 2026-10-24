@@ -1,0 +1,69 @@
+kind: playground
+
+# Custom OCI-image playground (built from rootfs/base). Unlike devsecops-k8s,
+# this does NOT layer on a platform base — it boots our own rootfs image, so the
+# drive `source` is an oci:// reference.
+#
+# NOTE: `name` gets a unique suffix on creation (e.g. devsecops-base-ab12cd34).
+# Use that suffixed name in all lesson/challenge `playground.name` references.
+# Build procedure:
+#   cd rootfs && make base && make push      # pushes ghcr.io/mercadoalex/devsecops-base
+#   (make the GHCR package PUBLIC)
+#   labctl playground create devsecops-base --base flexbox -f playground/devsecops-base.playground.yaml
+#   (flexbox is the base that accepts a custom oci:// rootfs drive)
+
+name: devsecops-base
+
+title: DevSecOps — Base Toolchain
+
+description: |
+  Docker, Trivy, Semgrep, Gitleaks, cosign, Checkov and OpenTofu pre-installed.
+  Used for the foundations, SAST, container-scanning, secret-scanning and DAST
+  lessons.
+
+categories:
+  - security
+  - ci-cd
+
+playground:
+  networks:
+    - name: local
+      subnet: 172.16.0.0/24
+
+  machines:
+    - name: dev-machine
+      users:
+        - name: root
+        - name: laborant
+          default: true
+          welcome: |
+            DevSecOps base lab. Tools ready: docker, trivy, semgrep, gitleaks,
+            cosign, checkov, tofu. Open "Terminal (dev)" to begin.
+      drives:
+        - source: oci://ghcr.io/mercadoalex/devsecops-base:latest
+          mount: /
+          size: 20GiB
+      network:
+        interfaces:
+          - network: local
+            address: 172.16.0.5/24
+
+  tabs:
+    - kind: ide
+      machine: dev-machine
+    - kind: terminal
+      name: Terminal (dev)
+      machine: dev-machine
+    - kind: http-port
+      name: Demo App
+      machine: dev-machine
+      number: 8080
+      target: window
+
+  accessControl:
+    canList:
+      - owner
+    canRead:
+      - anyone
+    canStart:
+      - anyone      # change to: student:<training-name> for a paid cohort

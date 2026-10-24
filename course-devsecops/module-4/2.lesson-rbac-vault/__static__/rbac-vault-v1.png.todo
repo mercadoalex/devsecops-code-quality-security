@@ -1,0 +1,5 @@
+Two-panel diagram. Left "RBAC": a ServiceAccount bound via RoleBinding to a Role
+allowing only get/list/watch on pods in the dev namespace; red X over attempts to
+read secrets or act in other namespaces. Right "Secrets": an app requests a DB
+password from a central Vault server, which checks a policy and returns it —
+instead of the password hard-coded in a YAML manifest. Flat style. max-width 860px.

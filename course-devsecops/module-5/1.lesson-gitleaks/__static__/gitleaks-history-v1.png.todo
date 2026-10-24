@@ -1,0 +1,5 @@
+Git commit history as a horizontal chain. An API key appears at commit 2, is
+"removed" at commit 4 (strikethrough in working tree), but a magnifying glass
+labelled Gitleaks inspects the full chain and highlights the secret still present
+in commit 2's diff. Caption: deleting a file does not remove it from history.
+Flat style. max-width 860px.

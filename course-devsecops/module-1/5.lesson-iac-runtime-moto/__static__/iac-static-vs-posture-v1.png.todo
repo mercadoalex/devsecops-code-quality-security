@@ -1,0 +1,5 @@
+Two-stage diagram. Stage 1 "Static (pre-deploy)": a .tf file scanned by Checkov
+before anything exists. Stage 2 "Posture (runtime)": OpenTofu applies to a moto
+emulated AWS account, then Prowler scans the live account's actual resources and
+reports findings. Caption: posture scanning also catches drift and
+console-created resources that static scans miss. Flat style. max-width 900px.

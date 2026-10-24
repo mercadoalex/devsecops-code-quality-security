@@ -1,0 +1,4 @@
+Container image shown as a box being X-rayed, revealing an inventory to its right
+titled "SBOM" with columns name/version/license (openssl 3.0.11, python 3.12.1,
+libc 2.36). Note: same SBOM can be re-scanned against new CVEs without rebuilding.
+Flat style. max-width 860px.

@@ -1,0 +1,45 @@
+# ---- OS / editor noise ----
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# ---- Secrets / credentials (never commit) ----
+.env
+*.env
+*.pem
+*.key
+credentials*
+cosign.key
+*.token
+
+# ---- Large build artifacts & installers (GitHub rejects >100MB) ----
+# Reference-project installers and downloads — must stay out of git.
+docs/reference-working/**/downloads/
+**/downloads/
+*.zip
+*.tar.gz
+*.tgz
+*.bin
+*.deb
+*.iso
+*.labpkg
+
+# ---- Container / build local state ----
+*.log
+tmp/
+.playground/
+
+# ---- Baked model / cache (if ever present locally) ----
+**/.ollama/
+**/.cache/
+
+# ---- Reference material from OTHER projects (not part of this course) ----
+# The ColdFusion course trees were used only as authoring references while
+# building; they are separate projects (reference-working has its own .git).
+# Keep the iximiuz authoring docs (docs/IXIMIUZ_*.md, *_AUTHORING.md, etc.)
+# but exclude the full ColdFusion course content.
+docs/reference-working/
+docs/reference-units/

@@ -1,0 +1,6 @@
+Horizontal pipeline with six gates left to right, each a box with its tool and a
+pass/fail gate symbol: 1 Secret scan (Gitleaks), 2 SAST (Semgrep), 3 Image CVE
+scan (Trivy), 4 SBOM (Trivy), 5 Sign (cosign), 6 Admission policy (Kyverno
+verifyImages). A commit enters on the left; only a signed, policy-compliant
+deployment exits on the right into a prod namespace. Any failing gate stops the
+flow with a red X. Flat style. max-width 900px.

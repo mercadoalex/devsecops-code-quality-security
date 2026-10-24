@@ -1,0 +1,72 @@
+kind: playground
+
+# Custom OCI-image playground (built from rootfs/ai). Boots our own rootfs image
+# with Ollama (qwen2.5:0.5b baked in) + Garak. CPU-only (Firecracker has no GPU).
+#
+# NOTE: `name` gets a unique suffix on creation (e.g. devsecops-ai-ab12cd34).
+# Use that suffixed name in the Module 6 lesson/challenge `playground.name`.
+# Build procedure:
+#   cd rootfs && make ai && make push         # pushes ghcr.io/mercadoalex/devsecops-ai
+#   (make the GHCR package PUBLIC)
+#   labctl playground create devsecops-ai --base flexbox -f playground/devsecops-ai.playground.yaml
+#   (flexbox is the base that accepts a custom oci:// rootfs drive)
+
+name: devsecops-ai
+
+title: DevSecOps — AI / LLM Security
+
+description: |
+  Ollama serving a small local model (qwen2.5:0.5b) plus the Garak LLM
+  vulnerability scanner. Used for prompt-injection testing and the OWASP LLM
+  Top 10. CPU-only; the Garak scan is deferred and runs in the background.
+
+categories:
+  - security
+  - programming
+
+playground:
+  networks:
+    - name: local
+      subnet: 172.16.0.0/24
+
+  machines:
+    - name: dev-machine
+      users:
+        - name: root
+        - name: laborant
+          default: true
+          welcome: |
+            DevSecOps AI lab. Ollama is serving qwen2.5:0.5b on :11434, and Garak
+            is installed. CPU-only — the Garak scan is deferred (runs in the
+            background). Open "Terminal (ollama)" to begin.
+      drives:
+        - source: oci://ghcr.io/mercadoalex/devsecops-ai:latest
+          mount: /
+          size: 20GiB
+      network:
+        interfaces:
+          - network: local
+            address: 172.16.0.5/24
+
+  tabs:
+    - kind: ide
+      machine: dev-machine
+    - kind: terminal
+      name: Terminal (dev)
+      machine: dev-machine
+    - kind: terminal
+      name: Terminal (ollama)
+      machine: dev-machine
+    - kind: http-port
+      name: Ollama API
+      machine: dev-machine
+      number: 11434
+      target: window
+
+  accessControl:
+    canList:
+      - owner
+    canRead:
+      - anyone
+    canStart:
+      - anyone      # change to: student:<training-name> for a paid cohort

@@ -1,0 +1,6 @@
+Diagram: a running container issues syscalls to the Linux kernel; Falco taps the
+syscall stream via an eBPF probe, evaluates each event against rules, and emits an
+alert on match — example alert box "Warning: shell spawned in container
+(user=root shell=bash container=app)". A timeline shows pre-deploy controls
+(scan, policy, sign) ending at deploy, and Falco covering the runtime period
+after. Flat style. max-width 860px.

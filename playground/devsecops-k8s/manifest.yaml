@@ -1,0 +1,282 @@
+kind: playground
+
+# NOTE: `name` gets a unique suffix appended by the platform on creation
+# (e.g. devsecops-k8s-ab12cd34). Use the suffixed name that
+# `labctl playground create` prints in all subsequent commands and in every
+# lesson/challenge `playground.name` reference. See BUILD_NOTES.md.
+#
+# This playground is NOT a custom OCI image. It is created on top of the
+# platform's `k3s` base and layered with our DevSecOps tools via initTasks —
+# the same proven pattern used by the Rancher course. Build procedure:
+#   labctl playground create devsecops-k8s --base k3s -q        # prints suffixed name
+#   labctl playground update <suffixed-name> -f playground/devsecops-k8s/manifest.yaml
+#   labctl playground start  <suffixed-name>
+#   labctl playground tasks  <suffixed-name>                    # watch init tasks
+
+name: devsecops-k8s
+
+title: DevSecOps — Kubernetes & Delivery
+
+description: |
+  A K3s cluster pre-loaded with the DevSecOps toolchain: Kyverno (policy-as-code),
+  a dev-mode secrets manager (OpenBao/Vault), Falco (runtime detection), a local
+  OCI registry, cosign, moto and Prowler. Used by the Kubernetes security,
+  image-signing and capstone lessons so students land in a ready cluster.
+
+categories:
+  - kubernetes
+  - security
+
+playground:
+  networks:
+    - name: local
+      subnet: 172.16.0.0/24
+
+  # Lean two-node cluster (control plane + one worker) + a workstation, to stay
+  # within the free-tier per-VM budget. Our init tasks are far lighter than a
+  # Rancher install, so this boots quickly.
+  machines:
+    - name: dev-machine
+      users:
+        - name: root
+        - name: laborant
+          default: true
+          welcome: |
+            DevSecOps Kubernetes lab. kubectl + helm are ready from this
+            workstation. Tools: Kyverno, Vault (dev), Falco, cosign, moto,
+            Prowler, local registry on :5000.
+            Run `kubectl get nodes` to confirm the cluster is up.
+      drives:
+        - source: k3s-dev-machine
+          mount: /
+          size: 30GiB
+      network:
+        interfaces:
+          - network: local
+            address: 172.16.0.5/24
+
+    - name: cplane-01
+      users:
+        - name: root
+        - name: laborant
+          default: true
+      drives:
+        - source: k3s-cplane
+          mount: /
+          size: 30GiB
+      network:
+        interfaces:
+          - network: local
+            address: 172.16.0.2/24
+
+    - name: node-01
+      users:
+        - name: root
+        - name: laborant
+          default: true
+      drives:
+        - source: k3s-node
+          mount: /
+          size: 30GiB
+      network:
+        interfaces:
+          - network: local
+            address: 172.16.0.3/24
+
+  tabs:
+    - kind: ide
+      machine: dev-machine
+    - kind: kexp
+      machine: dev-machine
+    - kind: terminal
+      machine: dev-machine
+    - kind: terminal
+      machine: cplane-01
+    # Demo app for the OWASP / ZAP-style exercises (served via NodePort 30080).
+    - kind: http-port
+      name: Demo App
+      machine: cplane-01
+      number: 30080
+      target: window
+
+  initTasks:
+    # Production-faithful: the student works from dev-machine (kubectl + helm),
+    # never on the control plane. Pull the cluster kubeconfig to dev-machine and
+    # rewrite the API server address to the control-plane IP.
+    init_kubeconfig_devmachine:
+      init: true
+      machine: dev-machine
+      user: laborant
+      timeout_seconds: 180
+      run: |
+        for i in $(seq 1 45); do
+          if ssh -o StrictHostKeyChecking=no -o ConnectTimeout=3 cplane-01 \
+               'sudo test -f /etc/rancher/k3s/k3s.yaml' 2>/dev/null; then
+            break
+          fi
+          sleep 2
+        done
+        mkdir -p "$HOME/.kube"
+        ssh -o StrictHostKeyChecking=no cplane-01 'sudo cat /etc/rancher/k3s/k3s.yaml' \
+          | sed 's/127.0.0.1/172.16.0.2/' > "$HOME/.kube/config"
+        chmod 600 "$HOME/.kube/config"
+        grep -q 'KUBECONFIG=' "$HOME/.bashrc" \
+          || echo 'export KUBECONFIG=$HOME/.kube/config' >> "$HOME/.bashrc"
+        export KUBECONFIG="$HOME/.kube/config"
+        kubectl get nodes
+
+    # The k3s base ships kubectl + helm but NONE of our DevSecOps CLIs. Install
+    # the full set the K8s lessons need. Each tool is installed in its own
+    # guarded block (|| true) so one failure never blocks the others, and we use
+    # binary installers (to /usr/local/bin, system-wide) instead of apt/pipx
+    # where possible — the k3s base does not have pipx preconfigured for laborant.
+    init_tools:
+      init: true
+      machine: dev-machine
+      user: laborant
+      needs:
+        - init_kubeconfig_devmachine
+      timeout_seconds: 600
+      run: |
+        set +e   # never let one tool's failure abort the rest
+        BIN=/usr/local/bin
+
+        # --- cosign (image signing) ---
+        command -v cosign >/dev/null 2>&1 || {
+          sudo curl -fsSL -o "$BIN/cosign" \
+            https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64 \
+            && sudo chmod +x "$BIN/cosign"; }
+
+        # --- Trivy (binary installer — more reliable than apt here) ---
+        command -v trivy >/dev/null 2>&1 || {
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh \
+            | sudo sh -s -- -b "$BIN"; }
+        trivy image --download-db-only 2>/dev/null || true
+
+        # --- Gitleaks (release binary) ---
+        command -v gitleaks >/dev/null 2>&1 || {
+          GL=8.21.2
+          curl -fsSL -o /tmp/gl.tgz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GL}/gitleaks_${GL}_linux_x64.tar.gz" \
+            && sudo tar -xzf /tmp/gl.tgz -C "$BIN" gitleaks && sudo chmod +x "$BIN/gitleaks"; }
+
+        # --- OpenTofu (release binary) ---
+        command -v tofu >/dev/null 2>&1 || {
+          TF=1.8.5
+          curl -fsSL -o /tmp/tofu.zip \
+            "https://github.com/opentofu/opentofu/releases/download/v${TF}/tofu_${TF}_linux_amd64.zip" \
+            && unzip -o /tmp/tofu.zip -d /tmp/tofu && sudo install -m 0755 /tmp/tofu/tofu "$BIN/tofu"; }
+
+        # --- Python tooling: ensure pip + pipx exist and PATH is wired ---
+        command -v pipx >/dev/null 2>&1 || {
+          sudo apt-get update && sudo apt-get install -y python3-pip python3-venv pipx; }
+        export PATH="$HOME/.local/bin:$PATH"
+        pipx ensurepath >/dev/null 2>&1 || true
+        grep -q '.local/bin' "$HOME/.bashrc" 2>/dev/null \
+          || echo 'export PATH=$HOME/.local/bin:$PATH' >> "$HOME/.bashrc"
+
+        # --- Semgrep, Checkov (SAST/IaC), moto/prowler/awscli (M1 L5) via pipx ---
+        for p in semgrep checkov "moto[server]" prowler awscli; do
+          pipx install "$p" 2>/dev/null || pipx upgrade "${p%%[*}" 2>/dev/null || true
+        done
+
+        echo "tool install finished; present:"
+        # NOTE: pipx exposes moto as 'moto_server' (not 'moto') — check that name.
+        for t in cosign trivy gitleaks tofu semgrep checkov moto_server prowler; do
+          printf '  %-10s %s\n' "$t" "$(command -v "$t" 2>/dev/null || echo MISSING)"
+        done
+
+    # Local OCI registry on the workstation (localhost:5000) for signing + capstone.
+    init_registry:
+      init: true
+      machine: dev-machine
+      user: laborant
+      needs:
+        - init_tools
+      timeout_seconds: 180
+      run: |
+        if ! docker ps --format '{{.Names}}' | grep -q '^local-registry$'; then
+          docker run -d --restart=always --name local-registry -p 5000:5000 registry:2
+        fi
+        for i in $(seq 1 30); do
+          curl -fsS http://localhost:5000/v2/ >/dev/null 2>&1 && break || sleep 2
+        done
+        echo "registry up on :5000"
+
+    # Kyverno (policy-as-code) applied to the cluster.
+    #
+    # We APPLY Kyverno here but DO NOT block the init on its rollout. Waiting on
+    # `rollout status` can exceed the init budget on a cold k3s (image pulls +
+    # CRD establishment), which stalls the whole "Warming up" screen. Instead we
+    # apply and return immediately; Kyverno finishes converging in the few
+    # seconds/minute after the playground is already usable. The Module 4 lesson
+    # itself checks that Kyverno is Ready before students use it.
+    init_kyverno:
+      init: true
+      machine: dev-machine
+      user: laborant
+      needs:
+        - init_kubeconfig_devmachine
+      timeout_seconds: 180
+      run: |
+        export KUBECONFIG="$HOME/.kube/config"
+        # server-side apply handles the large Kyverno CRDs cleanly.
+        kubectl apply --server-side -f https://github.com/kyverno/kyverno/releases/download/v1.13.2/install.yaml
+        # Bounded, non-blocking readiness hint (do NOT gate the boot on it):
+        kubectl -n kyverno wait --for=condition=Available deploy --all --timeout=60s 2>/dev/null || true
+        echo "kyverno applied (converging in background)"
+
+    # OpenBao (open-source Vault fork) in dev mode on the control-plane node,
+    # reachable at 172.16.0.2:8200. LAB ONLY — in-memory, root token 'root'.
+    init_vault_dev:
+      init: true
+      machine: cplane-01
+      user: root
+      timeout_seconds: 240
+      run: |
+        set -u
+        if ! command -v vault >/dev/null 2>&1 && ! command -v bao >/dev/null 2>&1; then
+          BAO_VER="2.1.0"
+          curl -fsSL -o /tmp/bao.deb \
+            "https://github.com/openbao/openbao/releases/download/v${BAO_VER}/bao_${BAO_VER}_linux_amd64.deb" \
+            && apt-get install -y /tmp/bao.deb || true
+          command -v bao >/dev/null 2>&1 && ln -sf "$(command -v bao)" /usr/local/bin/vault || true
+        fi
+        # Start dev server in the background, bound so the workstation can reach it.
+        nohup /usr/local/bin/vault server -dev -dev-root-token-id=root \
+          -dev-listen-address=0.0.0.0:8200 > /var/log/vault-dev.log 2>&1 &
+        sleep 3
+        echo "vault dev server starting on 172.16.0.2:8200 (token: root)"
+
+    # Falco (runtime detection) on the control-plane node, modern-eBPF driver.
+    # Confirmed to complete cleanly as an init task on the k3s base.
+    init_falco:
+      init: true
+      machine: cplane-01
+      user: root
+      timeout_seconds: 420
+      run: |
+        set -u
+        export DEBIAN_FRONTEND=noninteractive
+        echo "falco falco/driver_choice select Modern eBPF" | debconf-set-selections || true
+        curl -fsSL https://falco.org/repo/falcosecurity-packages.asc \
+          | gpg --dearmor -o /usr/share/keyrings/falco-archive-keyring.gpg || true
+        echo "deb [signed-by=/usr/share/keyrings/falco-archive-keyring.gpg] \
+        https://download.falco.org/packages/deb stable main" \
+          > /etc/apt/sources.list.d/falcosecurity.list
+        apt-get update && apt-get install -y --no-install-recommends falco || true
+        if [ -f /etc/falco/falco.yaml ]; then
+          grep -q 'kind: modern_ebpf' /etc/falco/falco.yaml \
+            || printf '\nengine:\n  kind: modern_ebpf\n' >> /etc/falco/falco.yaml
+        fi
+        systemctl restart falco-modern-bpf 2>/dev/null \
+          || systemctl restart falco 2>/dev/null || true
+        echo "falco installed (modern-eBPF)"
+
+  accessControl:
+    canList:
+      - owner
+    canRead:
+      - anyone
+    canStart:
+      - anyone     # change to: student:<training-name> for a paid cohort

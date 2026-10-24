@@ -1,0 +1,4 @@
+SDLC shown as a left-to-right arrow with five phases: Plan, Code, Build, Test,
+Deploy. A curved red "Shift-Left" arrow points from Deploy back toward Plan/Code.
+Underneath, a cost-to-fix curve rises steeply from "cents" during Plan to
+"thousands" during Deploy. Clean, flat infographic style. max-width 860px.

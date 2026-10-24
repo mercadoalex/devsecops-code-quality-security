@@ -1,0 +1,4 @@
+Before/after split. Left "Risky": Dockerfile with FROM ubuntu, many apt installs,
+no USER, hard-coded API key — red warning icons. Right "Hardened": FROM
+python:3.12-slim (pinned), created non-root appuser, USER appuser, secret from
+runtime — green checks. Flat style. max-width 860px.

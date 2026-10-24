@@ -1,0 +1,5 @@
+Diagram: two input files on the left — a Terraform/OpenTofu .tf and a Kubernetes
+pod.yaml — both flow into a scanner box "Checkov / trivy config" (center) that
+checks against a policy library (CIS benchmarks, provider best practices) and
+emits a report (right) listing PASSED/FAILED checks. Prominent note: "static
+analysis only — nothing is deployed, no cloud credentials". Flat style. max-width 860px.

@@ -1,0 +1,5 @@
+Split diagram. Left "SAST": magnifying glass over source-code files, labelled
+"reads the code, before running". Right "DAST": OWASP ZAP sending HTTP attack
+requests (XSS payload, header checks, injection) at a running web app and reading
+responses, labelled "attacks the running app, black box". Center note:
+"complementary — run both". Flat style. max-width 860px.

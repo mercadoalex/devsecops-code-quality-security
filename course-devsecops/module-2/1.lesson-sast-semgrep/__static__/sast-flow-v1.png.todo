@@ -1,0 +1,5 @@
+Diagram: source code (left) -> Semgrep CLI (center) applying a ruleset
+(OWASP, secrets, language rules) -> findings report (right) grouped by severity
+ERROR/WARNING/INFO. A gate box after the report shows PASS (green check, exit 0,
+"merge allowed") or FAIL (red cross, exit non-zero, "merge blocked"). Flat style.
+max-width 860px.
