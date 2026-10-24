@@ -41,22 +41,28 @@ tasks:
         echo "  sudo systemctl start docker"
       fi
 
-  verify_trivy_installed:
+  verify_first_scan:
     machine: dev-machine
     user: laborant
     needs:
       - verify_docker_ready
     run: |
-      if ! command -v trivy >/dev/null 2>&1; then
-        echo "trivy binary not found on PATH"
+      FILE=/home/laborant/first-scan.txt
+      if [ ! -f "${FILE}" ]; then
+        echo "${FILE} not found — run the trivy scan to create it"
         exit 1
       fi
-      echo "trivy is installed"
+      # The saved output should look like a Trivy report (header or a CVE/severity line)
+      if ! grep -qiE "trivy|alpine|CVE-|CRITICAL|HIGH|MEDIUM|LOW|Total:" "${FILE}"; then
+        echo "first-scan.txt does not look like Trivy scan output"
+        exit 1
+      fi
+      echo "first scan output present"
     hintcheck: |
       if ! command -v trivy >/dev/null 2>&1; then
-        echo "Trivy is not on your PATH. Check the install with:"
-        echo "  which trivy"
-        echo "  trivy --version"
+        echo "Trivy is not on your PATH. Check:  which trivy ; trivy --version"
+      else
+        echo "Run:  trivy image --scanners vuln alpine:3.20 | tee /home/laborant/first-scan.txt"
       fi
 
   verify_manifesto_file:
@@ -85,7 +91,7 @@ tasks:
     machine: dev-machine
     user: laborant
     needs:
-      - verify_trivy_installed
+      - verify_first_scan
       - verify_manifesto_file
     run: |
       echo "Lesson complete — well done!"

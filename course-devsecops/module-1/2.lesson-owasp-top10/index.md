@@ -45,11 +45,32 @@ tasks:
         echo "  docker run -d -p 8080:80 --name juice ghcr.io/iximiuz/labs/owasp-demo:latest"
       fi
 
-  verify_sqli_notes:
+  verify_exploit_run:
     machine: dev-machine
     user: laborant
     needs:
       - verify_vuln_app_running
+    run: |
+      FILE=/home/laborant/exploit-attempt.txt
+      if [ ! -f "${FILE}" ]; then
+        echo "${FILE} not found — run the injection payload and save the response"
+        exit 1
+      fi
+      # The saved response should show the injection attempt was made
+      if ! grep -qiE "OR '1'='1|1=1|admin|token|login" "${FILE}"; then
+        echo "exploit-attempt.txt does not look like the injection response"
+        exit 1
+      fi
+      echo "injection attempt recorded"
+    hintcheck: |
+      echo "Send the payload and save the response, e.g.:"
+      echo "  curl -s \"http://localhost:8080/login?user=admin'%20OR%20'1'='1&pass=x\" | tee /home/laborant/exploit-attempt.txt"
+
+  verify_sqli_notes:
+    machine: dev-machine
+    user: laborant
+    needs:
+      - verify_exploit_run
     run: |
       FILE=/home/laborant/owasp-findings.md
       if [ ! -f "${FILE}" ]; then

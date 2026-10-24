@@ -101,7 +101,9 @@ The demo app has a login form that builds its SQL query by string concatenation 
 ```bash
 # A classic SQL-injection payload: ' OR '1'='1 always evaluates true,
 # so the WHERE clause matches every row and the login is bypassed.
-curl -s "http://localhost:8080/login?user=admin'%20OR%20'1'='1&pass=whatever"
+# Save the response so you can record what happened.
+curl -s "http://localhost:8080/login?user=admin'%20OR%20'1'='1&pass=whatever" \
+  | tee /home/laborant/exploit-attempt.txt
 ```
 
 If the response contains a success or a session token for `admin`, you just bypassed authentication without knowing the password.
@@ -111,6 +113,18 @@ If the response contains a success or a session token for `admin`, you just bypa
 :summary: Why does ' OR '1'='1 break the login?
 ---
 The app builds a query like `SELECT * FROM users WHERE user='admin' AND pass='...'`. Your input closes the `user` string early and injects `OR '1'='1`, turning the condition into something that is always true. The database happily returns a row, and the app treats that as a successful login. The fix — parameterized queries — you will apply in the challenge and study in depth in Unit 2.
+::
+
+::simple-task
+---
+:tasks: tasks
+:name: verify_exploit_run
+---
+#active
+In the **Terminal (dev)** tab, send the injection payload above so the response is saved to `/home/laborant/exploit-attempt.txt`.
+
+#completed
+You exploited a live SQL injection — authentication bypassed. ✓
 ::
 
 ---

@@ -111,36 +111,40 @@ Docker is up and reachable. ✓
 
 ---
 
-## 3. Your first security tool: Trivy
+## 3. Run your first security scan
 
-**Trivy** is an open-source scanner from Aqua Security. It is the Swiss-army knife of this course: it scans container images, filesystems, Git repos, and Kubernetes clusters for known vulnerabilities, and it can produce a software bill of materials. You will use it heavily in Units 1, 3, and 7.
+**Trivy** is an open-source scanner from Aqua Security — the Swiss-army knife of this course. It scans container images, filesystems, Git repos, and Kubernetes clusters for known vulnerabilities, and it can produce a software bill of materials. You will use it heavily in Units 1, 3, and 7.
 
-For now, just confirm it is installed.
+No slow build-up here — let's *do* security in your very first lesson. You'll scan a real container image and watch Trivy report actual findings.
 
-**Activity — Terminal (dev):** Check the Trivy version.
+**Activity — Terminal (dev):** Scan a small base image and save the result. (First run downloads the vulnerability database — give it a moment.)
 
 ```bash
-# Confirm Trivy is installed and print its version
-trivy --version
+# Scan a small image; Trivy downloads its vuln DB on first run, then reports findings
+trivy image --scanners vuln alpine:3.20 | tee /home/laborant/first-scan.txt
 ```
+
+> ⏱️ The first scan downloads the vulnerability database and can take 30–60 seconds.
+
+When it finishes you'll see a table of any known vulnerabilities in that image, grouped by severity. That's it — you just ran a real security control.
 
 ::hint-box
 ---
-:summary: Why confirm versions before doing anything?
+:summary: I barely understand the output — is that a problem?
 ---
-Security tooling moves fast, and a vulnerability database is only as good as its last update. Knowing the exact tool version is the first step in making a scan reproducible — the same image scanned with two different Trivy versions can report different findings. In Unit 3 you will pin versions deliberately for exactly this reason.
+Not at all. Right now the goal is simply to *see a scanner produce findings* — the muscle memory of "scan before you trust." You don't need to interpret severities, fixed versions, or CVE IDs yet. **Unit 3 covers reading a Trivy report, severity levels, and turning a scan into a build gate in full detail.** For now, a table on screen = success.
 ::
 
 ::simple-task
 ---
 :tasks: tasks
-:name: verify_trivy_installed
+:name: verify_first_scan
 ---
 #active
-In the **Terminal (dev)** tab, run `trivy --version` and confirm the binary is found on your PATH.
+In the **Terminal (dev)** tab, run the Trivy scan above so it writes `/home/laborant/first-scan.txt`.
 
 #completed
-Trivy is installed and ready. ✓
+You ran your first vulnerability scan — security in action from minute one. ✓
 ::
 
 ---
