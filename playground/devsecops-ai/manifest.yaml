@@ -1,15 +1,15 @@
 kind: playground
 
-# DevSecOps AI playground — built on the official `docker` base (Docker +
-# examiner + python3) and layered with Ollama + Garak via initTasks. REPLACES
-# the old custom OCI rootfs image (which lacked the examiner, so tasks never
-# graded). CPU-only; the Garak scan in the lesson is deferred (background).
+# DevSecOps AI playground — `--base flexbox` with a single `dev-machine` whose
+# rootfs `source: docker` provides Docker + the iximiuz examiner + python3.
+# Ollama + Garak install via initTasks. REPLACES the old custom OCI rootfs image
+# (which lacked the examiner, so tasks never graded). CPU-only; Garak deferred.
 #
 # Build procedure:
-#   labctl playground create devsecops-ai --base docker -q         # prints suffixed name
+#   labctl playground create devsecops-ai --base flexbox -q         # prints suffixed name
 #   labctl playground update <suffixed-name> -f playground/devsecops-ai/manifest.yaml
 #   labctl playground start  <suffixed-name>
-#   labctl playground tasks  <suffixed-name>
+#   labctl playground tasks  <run-id> --kind init --wait
 #
 # The NEW suffixed name must replace the old devsecops-ai-f64ca106 in the
 # Module 6 lesson/challenge `playground.name`.
@@ -28,16 +28,45 @@ categories:
   - programming
 
 playground:
+  networks:
+    - name: local
+      subnet: 172.16.0.0/24
+
+  machines:
+    - name: dev-machine
+      users:
+        - name: root
+        - name: laborant
+          default: true
+          welcome: |
+            DevSecOps AI lab. Ollama serves qwen2.5:0.5b on :11434 and Garak is
+            installed (both at boot). CPU-only — the Garak scan is deferred.
+            Open "Terminal (ollama)" to begin.
+      drives:
+        - source: docker
+          mount: /
+      network:
+        interfaces:
+          - network: local
+      resources:
+        cpuCount: 2
+        ramSize: 4GiB
+
   tabs:
-    - kind: ide
+    - id: ide-dev
+      kind: ide
+      name: IDE
       machine: dev-machine
-    - kind: terminal
+    - id: terminal-dev
+      kind: terminal
       name: Terminal (dev)
       machine: dev-machine
-    - kind: terminal
+    - id: terminal-ollama
+      kind: terminal
       name: Terminal (ollama)
       machine: dev-machine
-    - kind: http-port
+    - id: http-ollama-11434
+      kind: http-port
       name: Ollama API
       machine: dev-machine
       number: 11434
