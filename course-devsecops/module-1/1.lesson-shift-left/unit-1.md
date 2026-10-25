@@ -169,6 +169,17 @@ No. Right now you're just learning to *read* a scan. In **Unit 3** you'll learn 
 
 ::hint-box
 ---
+:summary: Where does "triage" come from — and why it's the right word for security?
+---
+You'll hear **triage** constantly in security: sorting findings by urgency so you fix what matters first. The word has a vivid origin. It comes from the French _triage_ (from the old verb _trier_ — "to pick, separate, sort"), attested since the 12th century, rooted in Latin _tritāre_ ("to crush, grind"). It entered **medicine** through **Dominique-Jean Larrey**, surgeon of Napoleon's Imperial Guard (c. 1792–1799), to describe sorting battlefield casualties by severity — and passed into English around 1918, during the First World War.
+
+The instinct carried straight into DevSecOps. A scanner may report dozens of vulnerabilities and, like a field surgeon, you can't treat everything at once — you **triage**: handle the CRITICAL/HIGH findings that have a fix first, and schedule the rest. Same instinct, different battlefield.
+
+_Further reading (author's own): [Triaje de defectos en DevOps](https://medium.com/devopslatam/triaje-de-defectos-en-devops-5134abbc1cf6)_
+::
+
+::hint-box
+---
 :summary: I barely understand the output — is that a problem?
 ---
 Not at all. Right now the goal is simply to *see a scanner produce findings* — the muscle memory of "scan before you trust." You don't need to interpret severities, fixed versions, or CVE IDs yet. **Unit 3 covers reading a Trivy report, severity levels, and turning a scan into a build gate in full detail.** For now, a table on screen = success.
