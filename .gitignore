@@ -32,6 +32,10 @@ docs/reference-working/**/downloads/
 tmp/
 .playground/
 
+# ---- labctl pull artifacts (zero-byte HTTP status leftover) ----
+200
+**/200
+
 # ---- Baked model / cache (if ever present locally) ----
 **/.ollama/
 **/.cache/
