@@ -25,7 +25,7 @@ tagz:
 - devsecops
 
 playground:
-  name: devsecops-base-c07e1a31
+  name: devsecops-base-0d12f62a
 
 challenges:
   iac-security-a78880fb: {}

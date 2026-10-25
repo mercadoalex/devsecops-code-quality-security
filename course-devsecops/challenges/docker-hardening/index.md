@@ -24,7 +24,7 @@ createdAt: 2026-10-23
 updatedAt: 2026-10-23
 
 playground:
-  name: devsecops-base-c07e1a31
+  name: devsecops-base-0d12f62a
 
 tasks:
   verify_image_built:
