@@ -40,17 +40,19 @@ The **baseline** scan is mostly *passive*: ZAP spiders the app and inspects the 
 
 ## 1. Start a target app
 
-**Activity — Terminal (dev):** Start a small web app to scan.
+**Activity — Terminal (dev):** Confirm a target web app is running to scan. The lab's demo app **auto-starts on port 8080**.
 
 ```bash
-# A small target web app on port 8080
-docker run -d -p 8080:80 --name dast-target ghcr.io/iximiuz/labs/owasp-demo:latest
-
-# Confirm it responds
+# The demo app auto-starts on :8080 — confirm it responds (expect 200)
 curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/
 ```
 
-> ⏱️ The first run pulls the image — allow 30–90 seconds.
+If it isn't up for any reason, start it yourself:
+
+```bash
+# Only needed if port 8080 is not already responding:
+docker run -d -p 8080:80 --name demo-app vuln-app:latest 2>/dev/null || true
+```
 
 ::simple-task
 ---

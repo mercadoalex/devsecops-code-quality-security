@@ -64,19 +64,23 @@ In older editions (2013, 2017) Injection was A01 and had sub-entries. In 2021 OW
 
 ## 2. Start the vulnerable demo app
 
-The fastest way to understand a vulnerability is to exploit it in a safe sandbox. The lab ships a deliberately vulnerable web app as a container.
+The fastest way to understand a vulnerability is to exploit it in a safe sandbox. The lab ships a deliberately vulnerable web app that **starts automatically on port 8080** when the playground boots.
 
-**Activity — Terminal (dev):** Start the demo app and confirm it responds.
+**Activity — Terminal (dev):** Confirm the demo app is responding.
 
 ```bash
-# Start the deliberately vulnerable demo app
-docker run -d -p 8080:80 --name juice ghcr.io/iximiuz/labs/owasp-demo:latest
-
-# Confirm it is serving (expect 200)
+# The vulnerable demo app auto-starts on :8080 — confirm it is serving (expect 200)
 curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/
 ```
 
-> ⏱️ The first run pulls the image and can take 30–90 seconds.
+If you get `200`, it's ready. If for any reason it isn't up yet, you can start it yourself:
+
+```bash
+# Only needed if port 8080 is not already responding:
+docker run -d -p 8080:80 --name demo-app vuln-app:latest 2>/dev/null || true
+```
+
+> ⏱️ On a fresh playground the app is usually already running within a few seconds of boot.
 
 ::simple-task
 ---

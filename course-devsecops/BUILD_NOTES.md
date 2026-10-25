@@ -56,9 +56,13 @@ Manifests live in `playground/`:
 | Syft, Grype *(optional)* | Apache 2.0 | anchore release | mentioned as alternatives; nice-to-have |
 | jq, yq, git, curl | MIT/various | distro repo | — |
 | Local registry | Apache 2.0 | `registry:2` on `localhost:5000` | optional on base; required on k8s |
-| Demo app image | — | `ghcr.io/iximiuz/labs/owasp-demo:latest` (+ `:patched`) | **pre-pull**; used by OWASP + ZAP lessons |
+| Demo vulnerable app | — | baked source at `/opt/vuln-app` in `rootfs/base`; built + run on :8080 by the `vuln-app` boot service | used by OWASP Top 10 + ZAP lessons; patched variant via `APP_MODE=patched` |
 
-> The `owasp-demo` image names (`:latest`, `:patched`) are placeholders used in
+> RESOLVED: the demo app is now a tiny stdlib-Python app baked into
+> `rootfs/base` at `/opt/vuln-app` (source + Dockerfile). A `vuln-app` systemd
+> service builds it and runs the vulnerable variant on `:8080` at boot; the
+> patched variant is `docker run -e APP_MODE=patched ... vuln-app:latest`.
+> The old external placeholder names (`:latest`, `:patched`) are no longer used.
 > tasks — point them at whatever deliberately-vulnerable demo you bake/host, and
 > keep the same tags, or update the task scripts.
 

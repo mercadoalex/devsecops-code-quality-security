@@ -98,14 +98,16 @@ concatenating the `user` parameter. Your job has three parts:
 ---
 :summary: How do I run the patched version?
 ---
-A patched image is pre-pulled in the lab. Start it on a second port:
+The demo app image is baked into the lab. Start the **patched** variant on a
+second port by setting `APP_MODE=patched`:
 
 ```bash
-docker run -d -p 9090:80 --name juice-fixed ghcr.io/iximiuz/labs/owasp-demo:patched
+docker run -d -p 9090:80 --name juice-fixed -e APP_MODE=patched vuln-app:latest
 ```
 
-The patched build binds parameters instead of concatenating them, so the
-injection payload is treated as a literal (nonexistent) username.
+In patched mode the app binds query parameters instead of concatenating them, so
+the injection payload is treated as a literal (nonexistent) username and the
+login fails.
 ::
 
 ::simple-task

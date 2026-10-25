@@ -17,6 +17,17 @@ ENV LAB_USER=${LAB_USER}
 COPY common/install-base-tools.sh /tmp/install-base-tools.sh
 RUN chmod +x /tmp/install-base-tools.sh && /tmp/install-base-tools.sh && rm -f /tmp/install-base-tools.sh
 
+# Bake the deliberately-vulnerable demo app source (OWASP + ZAP lessons).
+# The source lives at /opt/vuln-app; a boot helper builds + runs it so the
+# vulnerable app is already serving on :8080 when students reach those lessons.
+COPY vuln-app/ /opt/vuln-app/
+COPY common/vuln-app-boot.sh /usr/local/bin/vuln-app-boot.sh
+RUN chmod +x /usr/local/bin/vuln-app-boot.sh \
+    && chown -R ${LAB_USER}:${LAB_USER} /opt/vuln-app
+COPY common/vuln-app.service /etc/systemd/system/vuln-app.service
+RUN ln -sf /etc/systemd/system/vuln-app.service \
+      /etc/systemd/system/multi-user.target.wants/vuln-app.service
+
 # A friendly welcome shown in the terminal.
 RUN printf 'DevSecOps — Base playground\nTools: docker, trivy, semgrep, gitleaks, cosign, checkov, tofu\n' \
       > /home/${LAB_USER}/.welcome \

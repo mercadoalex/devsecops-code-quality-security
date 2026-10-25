@@ -42,7 +42,7 @@ tasks:
       STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/)
       if [ "${STATUS}" != "200" ]; then
         echo "The demo app is not up yet. Start it with:"
-        echo "  docker run -d -p 8080:80 --name juice ghcr.io/iximiuz/labs/owasp-demo:latest"
+        echo "  The demo app auto-starts on :8080. If not up:  docker run -d -p 8080:80 --name demo-app vuln-app:latest"
       fi
 
   verify_exploit_run:

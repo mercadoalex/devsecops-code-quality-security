@@ -89,7 +89,9 @@ tasks:
 :summary: The scan command
 ---
 ```bash
-docker run -d -p 8080:80 --name dast-target ghcr.io/iximiuz/labs/owasp-demo:latest
+# The demo app auto-starts on :8080; this line is only needed if it isn't up:
+docker run -d -p 8080:80 --name demo-app vuln-app:latest 2>/dev/null || true
+
 docker run --rm --network host -v /home/laborant:/zap/wrk:rw \
   ghcr.io/zaproxy/zaproxy:stable \
   zap-baseline.py -t http://localhost:8080 -r zap-report.html -m 2 -I

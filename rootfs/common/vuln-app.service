@@ -1,0 +1,12 @@
+[Unit]
+Description=DevSecOps demo vulnerable app (builds + runs on :8080)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/vuln-app-boot.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
