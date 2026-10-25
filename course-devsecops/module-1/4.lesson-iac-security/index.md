@@ -35,6 +35,18 @@ tasks:
     machine: dev-machine
     user: laborant
     run: |
+      # Graded on an artifact the STUDENT produces, not the ambient PATH,
+      # so this task only turns green after the learner actually checks the tools.
+      FILE=/home/laborant/iac-tools.txt
+      if [ ! -f "${FILE}" ]; then
+        echo "${FILE} not found — run the version check in the Terminal (dev) tab"
+        exit 1
+      fi
+      if ! grep -qiE "checkov|version" "${FILE}"; then
+        echo "${FILE} does not look like the tool version output — re-run the check"
+        exit 1
+      fi
+      # Double-check both scanners really are on PATH (the marker could be stale).
       if ! command -v checkov >/dev/null 2>&1; then
         echo "checkov not found"
         exit 1
@@ -43,9 +55,10 @@ tasks:
         echo "trivy not found"
         exit 1
       fi
-      echo "tools present"
+      echo "tools present and confirmed by the student"
     hintcheck: |
-      echo "Confirm the IaC scanners:  checkov --version ; trivy --version"
+      echo "Run this exact block in the Terminal (dev) tab:"
+      echo "  { checkov --version; trivy --version; } | tee /home/laborant/iac-tools.txt"
 
   verify_tf_file:
     machine: dev-machine

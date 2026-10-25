@@ -142,13 +142,20 @@ Store a secret in the dev-mode Vault and save the read-back output to `/home/lab
 You read a secret from Vault. ✓
 ::
 
+Finally, confirm the cluster is reachable and record the node list so the lab can confirm you ran this step:
+
+```bash
+# tee records the node list so the lab can confirm YOU ran this step
+kubectl get nodes | tee /home/laborant/cluster-check.txt
+```
+
 ::simple-task
 ---
 :tasks: tasks
 :name: verify_cluster
 ---
 #active
-Confirm the cluster is reachable with `kubectl get nodes`.
+Confirm the cluster is reachable with `kubectl get nodes` — the check records it to `/home/laborant/cluster-check.txt`.
 
 #completed
 Cluster is ready. ✓

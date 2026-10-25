@@ -66,11 +66,12 @@ In older editions (2013, 2017) Injection was A01 and had sub-entries. In 2021 OW
 
 The fastest way to understand a vulnerability is to exploit it in a safe sandbox. The lab ships a deliberately vulnerable web app that **starts automatically on port 8080** when the playground boots.
 
-**Activity — Terminal (dev):** Confirm the demo app is responding.
+**Activity — Terminal (dev):** Confirm the demo app is responding — the check records the status to `/home/laborant/app-check.txt`.
 
 ```bash
 # The vulnerable demo app auto-starts on :8080 — confirm it is serving (expect 200)
-curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/
+# tee records the HTTP status so the lab can confirm YOU ran this step
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/ | tee /home/laborant/app-check.txt
 ```
 
 If you get `200`, it's ready. If for any reason it isn't up yet, you can start it yourself:
@@ -88,7 +89,7 @@ docker run -d -p 8080:80 --name demo-app vuln-app:latest 2>/dev/null || true
 :name: verify_vuln_app_running
 ---
 #active
-Start the demo app and confirm `http://localhost:8080/` returns HTTP 200.
+Run the curl check so `http://localhost:8080/` returns HTTP 200 — the check records it to `/home/laborant/app-check.txt`.
 
 #completed
 The vulnerable demo app is running on port 8080. ✓

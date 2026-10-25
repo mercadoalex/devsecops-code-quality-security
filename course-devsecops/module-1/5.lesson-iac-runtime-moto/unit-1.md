@@ -46,12 +46,11 @@ Exactly the same shape, applied to infrastructure. **Static IaC scan (Checkov)**
 
 ## 1. Confirm the stack
 
-**Activity — Terminal (dev):** Check the three tools are present.
+**Activity — Terminal (dev):** Check the three tools are present — the check records their versions to `/home/laborant/rt-tools.txt`.
 
 ```bash
-moto_server --help | head -n 2
-tofu version
-prowler --version
+# Record all three tool versions so the lab can confirm YOU ran this step
+{ moto_server --version; tofu version; prowler --version; } | tee /home/laborant/rt-tools.txt
 ```
 
 ::simple-task
@@ -60,7 +59,7 @@ prowler --version
 :name: verify_tools
 ---
 #active
-Confirm `moto_server`, `tofu`, and `prowler` are all installed.
+Confirm `moto_server`, `tofu`, and `prowler` are all installed — the check records their versions to `/home/laborant/rt-tools.txt`.
 
 #completed
 The runtime IaC stack is ready. ✓

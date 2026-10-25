@@ -34,13 +34,26 @@ tasks:
     machine: dev-machine
     user: laborant
     run: |
+      # Graded on an artifact the STUDENT produces, not the ambient PATH,
+      # so this task only turns green after the learner actually checks the version.
+      FILE=/home/laborant/gitleaks-version.txt
+      if [ ! -f "${FILE}" ]; then
+        echo "${FILE} not found — run the version check in the Terminal (dev) tab"
+        exit 1
+      fi
+      if [ ! -s "${FILE}" ]; then
+        echo "${FILE} is empty — re-run the version check"
+        exit 1
+      fi
+      # Double-check Gitleaks really is on PATH (the marker could be stale).
       if ! command -v gitleaks >/dev/null 2>&1; then
         echo "gitleaks not found"
         exit 1
       fi
-      echo "gitleaks ok"
+      echo "gitleaks ok and confirmed by the student"
     hintcheck: |
-      echo "Confirm Gitleaks:  gitleaks version"
+      echo "Run this exact command in the Terminal (dev) tab:"
+      echo "  gitleaks version | tee /home/laborant/gitleaks-version.txt"
 
   verify_repo:
     machine: dev-machine

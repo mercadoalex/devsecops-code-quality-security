@@ -34,13 +34,27 @@ tasks:
     machine: dev-machine
     user: laborant
     run: |
+      # Graded on an artifact the STUDENT produces, not the ambient service state,
+      # so this task only turns green after the learner actually checks Falco.
+      FILE=/home/laborant/falco-status.txt
+      if [ ! -f "${FILE}" ]; then
+        echo "${FILE} not found — run the status check in the Terminal (dev) tab"
+        exit 1
+      fi
+      if [ ! -s "${FILE}" ]; then
+        echo "${FILE} is empty — re-run the status check"
+        exit 1
+      fi
+      # Double-check Falco really is running (the marker could be stale).
       if ! pgrep -x falco >/dev/null 2>&1 && ! systemctl is-active --quiet falco 2>/dev/null; then
         echo "Falco does not appear to be running"
         exit 1
       fi
-      echo "falco running"
+      echo "falco running and confirmed by the student"
     hintcheck: |
-      echo "Start Falco if needed:  sudo systemctl start falco  (or check: sudo systemctl status falco)"
+      echo "Run this exact command in the Terminal (dev) tab:"
+      echo "  sudo systemctl status falco | tee /home/laborant/falco-status.txt"
+      echo "(If systemctl is unavailable, use:  pgrep -x falco | tee /home/laborant/falco-status.txt)"
 
   verify_custom_rule:
     machine: dev-machine

@@ -34,13 +34,26 @@ tasks:
     machine: dev-machine
     user: laborant
     run: |
+      # Graded on an artifact the STUDENT produces, not the ambient service state,
+      # so this task only turns green after the learner actually probes Ollama.
+      FILE=/home/laborant/ollama-check.txt
+      if [ ! -f "${FILE}" ]; then
+        echo "${FILE} not found — run the curl check in the Terminal (dev) tab"
+        exit 1
+      fi
+      if [ ! -s "${FILE}" ]; then
+        echo "${FILE} is empty — re-run the curl check"
+        exit 1
+      fi
+      # Double-check the Ollama API really is up (the marker could be stale).
       if ! curl -s http://localhost:11434/api/tags >/dev/null 2>&1; then
         echo "Ollama API not responding on 11434"
         exit 1
       fi
-      echo "ollama ok"
+      echo "ollama ok and confirmed by the student"
     hintcheck: |
-      echo "Check Ollama:  curl -s http://localhost:11434/api/tags"
+      echo "Run this exact command in the Terminal (dev) tab:"
+      echo "  curl -s http://localhost:11434/api/tags | tee /home/laborant/ollama-check.txt"
 
   verify_model_pulled:
     machine: dev-machine

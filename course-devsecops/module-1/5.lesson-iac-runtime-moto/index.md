@@ -35,15 +35,28 @@ tasks:
     machine: dev-machine
     user: laborant
     run: |
+      # Graded on an artifact the STUDENT produces, not the ambient PATH,
+      # so this task only turns green after the learner actually checks the stack.
+      FILE=/home/laborant/rt-tools.txt
+      if [ ! -f "${FILE}" ]; then
+        echo "${FILE} not found — run the version check in the Terminal (dev) tab"
+        exit 1
+      fi
+      if [ ! -s "${FILE}" ]; then
+        echo "${FILE} is empty — re-run the version check"
+        exit 1
+      fi
+      # Double-check all three tools really are on PATH (the marker could be stale).
       for t in moto_server tofu prowler; do
         if ! command -v "$t" >/dev/null 2>&1; then
           echo "$t not found on PATH"
           exit 1
         fi
       done
-      echo "tools present"
+      echo "tools present and confirmed by the student"
     hintcheck: |
-      echo "Confirm the stack:  moto_server --help ; tofu version ; prowler --version"
+      echo "Run this exact block in the Terminal (dev) tab:"
+      echo "  { moto_server --version; tofu version; prowler --version; } | tee /home/laborant/rt-tools.txt"
 
   verify_moto_running:
     machine: dev-machine

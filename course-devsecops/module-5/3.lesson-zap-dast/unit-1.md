@@ -44,7 +44,8 @@ The **baseline** scan is mostly *passive*: ZAP spiders the app and inspects the 
 
 ```bash
 # The demo app auto-starts on :8080 — confirm it responds (expect 200)
-curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/
+# tee records the HTTP status so the lab can confirm YOU ran this step
+curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/ | tee /home/laborant/target-check.txt
 ```
 
 If it isn't up for any reason, start it yourself:
@@ -60,7 +61,7 @@ docker run -d -p 8080:80 --name demo-app vuln-app:latest 2>/dev/null || true
 :name: verify_target_up
 ---
 #active
-Start the target app and confirm `http://localhost:8080/` returns HTTP 200.
+Run the curl check so `http://localhost:8080/` returns HTTP 200 — the check records it to `/home/laborant/target-check.txt`.
 
 #completed
 The scan target is running. ✓

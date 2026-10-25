@@ -62,7 +62,8 @@ A baseline is a snapshot of the findings that already exist. Once you have it, t
 **Activity — Terminal (dev):** Confirm Semgrep, then capture a baseline of the demo project's current findings.
 
 ```bash
-semgrep --version
+# Record the version so the lab can confirm YOU ran this step
+semgrep --version | tee /home/laborant/semgrep-version.txt
 
 cd /home/laborant/project
 # Snapshot the current findings as the "accepted legacy debt" baseline
@@ -83,7 +84,7 @@ Semgrep can diff against a Git commit: `semgrep scan --baseline-commit <sha>` re
 :name: verify_semgrep
 ---
 #active
-Run `semgrep --version` to confirm the tool is available.
+Run `semgrep --version` to confirm the tool is available — the check records it to `/home/laborant/semgrep-version.txt`.
 
 #completed
 Semgrep is ready. ✓

@@ -34,13 +34,26 @@ tasks:
     machine: dev-machine
     user: laborant
     run: |
+      # Graded on an artifact the STUDENT produces, not the ambient PATH,
+      # so this task only turns green after the learner actually checks the version.
+      FILE=/home/laborant/semgrep-version.txt
+      if [ ! -f "${FILE}" ]; then
+        echo "${FILE} not found — run the version check in the Terminal (dev) tab"
+        exit 1
+      fi
+      if ! grep -qE "[0-9]+\.[0-9]+|[0-9]" "${FILE}"; then
+        echo "${FILE} does not look like a version string — re-run the check"
+        exit 1
+      fi
+      # Double-check Semgrep really is on PATH (the marker could be stale).
       if ! command -v semgrep >/dev/null 2>&1; then
         echo "semgrep not found on PATH"
         exit 1
       fi
-      echo "semgrep present"
+      echo "semgrep present and confirmed by the student"
     hintcheck: |
-      echo "Confirm Semgrep is installed:  semgrep --version"
+      echo "Run this exact command in the Terminal (dev) tab:"
+      echo "  semgrep --version | tee /home/laborant/semgrep-version.txt"
 
   verify_project_created:
     machine: dev-machine

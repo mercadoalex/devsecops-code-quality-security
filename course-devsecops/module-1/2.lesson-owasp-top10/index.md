@@ -32,17 +32,30 @@ tasks:
     machine: dev-machine
     user: laborant
     run: |
+      # Graded on an artifact the STUDENT produces, not the ambient app state,
+      # so this task only turns green after the learner actually probes the app.
+      FILE=/home/laborant/app-check.txt
+      if [ ! -f "${FILE}" ]; then
+        echo "${FILE} not found — run the curl check in the Terminal (dev) tab"
+        exit 1
+      fi
+      if ! grep -q "200" "${FILE}"; then
+        echo "${FILE} does not record a 200 response — re-run the curl check"
+        exit 1
+      fi
+      # Double-check the app really is up (the marker could be stale).
       STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/)
       if [ "${STATUS}" != "200" ]; then
         echo "Vulnerable demo app not responding on port 8080 (got ${STATUS})"
         exit 1
       fi
-      echo "Vulnerable demo app is running"
+      echo "Vulnerable demo app is running and confirmed by the student"
     hintcheck: |
+      echo "Run this exact command in the Terminal (dev) tab:"
+      echo "  curl -s -o /dev/null -w '%{http_code}\\n' http://localhost:8080/ | tee /home/laborant/app-check.txt"
       STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/)
       if [ "${STATUS}" != "200" ]; then
-        echo "The demo app is not up yet. Start it with:"
-        echo "  The demo app auto-starts on :8080. If not up:  docker run -d -p 8080:80 --name demo-app vuln-app:latest"
+        echo "(The demo app is still warming up — it auto-starts on :8080; wait a few seconds and re-run.)"
       fi
 
   verify_exploit_run:

@@ -35,13 +35,26 @@ tasks:
     machine: dev-machine
     user: laborant
     run: |
+      # Graded on an artifact the STUDENT produces, not the ambient cluster state,
+      # so this task only turns green after the learner actually queries the cluster.
+      FILE=/home/laborant/cluster-check.txt
+      if [ ! -f "${FILE}" ]; then
+        echo "${FILE} not found — run the node check in the Terminal (dev) tab"
+        exit 1
+      fi
+      if ! grep -q "Ready" "${FILE}"; then
+        echo "${FILE} does not show a Ready node — re-run the node check"
+        exit 1
+      fi
+      # Double-check the cluster really is reachable (the marker could be stale).
       if ! kubectl get nodes >/dev/null 2>&1; then
         echo "cluster not reachable"
         exit 1
       fi
-      echo "cluster ok"
+      echo "cluster ok and confirmed by the student"
     hintcheck: |
-      echo "Check the cluster:  kubectl get nodes"
+      echo "Run this exact command in the Terminal (dev) tab:"
+      echo "  kubectl get nodes | tee /home/laborant/cluster-check.txt"
 
   verify_role_created:
     machine: dev-machine

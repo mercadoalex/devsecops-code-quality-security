@@ -34,13 +34,26 @@ tasks:
     machine: dev-machine
     user: laborant
     run: |
+      # Graded on an artifact the STUDENT produces, not the ambient PATH,
+      # so this task only turns green after the learner actually checks the version.
+      FILE=/home/laborant/cosign-version.txt
+      if [ ! -f "${FILE}" ]; then
+        echo "${FILE} not found — run the version check in the Terminal (dev) tab"
+        exit 1
+      fi
+      if [ ! -s "${FILE}" ]; then
+        echo "${FILE} is empty — re-run the version check"
+        exit 1
+      fi
+      # Double-check cosign really is on PATH (the marker could be stale).
       if ! command -v cosign >/dev/null 2>&1; then
         echo "cosign not found"
         exit 1
       fi
-      echo "cosign ok"
+      echo "cosign ok and confirmed by the student"
     hintcheck: |
-      echo "Confirm cosign:  cosign version"
+      echo "Run this exact command in the Terminal (dev) tab:"
+      echo "  cosign version | tee /home/laborant/cosign-version.txt"
 
   verify_keypair:
     machine: dev-machine

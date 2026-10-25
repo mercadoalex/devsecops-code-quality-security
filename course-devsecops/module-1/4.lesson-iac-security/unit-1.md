@@ -151,8 +151,8 @@ Kubernetes scan target is ready. ✓
 **Activity — Terminal (dev):** Confirm the scanners, then scan the whole `iac/` directory.
 
 ```bash
-checkov --version
-trivy --version
+# Record both tool versions so the lab can confirm YOU ran this step
+{ checkov --version; trivy --version; } | tee /home/laborant/iac-tools.txt
 
 # Checkov scans every supported file in the directory (HCL + YAML)
 checkov -d /home/laborant/iac --compact | tee /home/laborant/iac-scan.txt
@@ -188,7 +188,7 @@ Both scan targets analyzed; report saved. ✓
 :name: verify_tools
 ---
 #active
-Run `checkov --version` and `trivy --version` to confirm both scanners are available.
+Run `checkov --version` and `trivy --version` to confirm both scanners are available — the check records them to `/home/laborant/iac-tools.txt`.
 
 #completed
 IaC scanners are ready. ✓

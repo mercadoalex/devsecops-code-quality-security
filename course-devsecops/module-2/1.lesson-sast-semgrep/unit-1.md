@@ -67,11 +67,11 @@ Trivy scans *dependencies and images* — other people's code you pulled in, che
 
 The base playground ships Semgrep pre-installed.
 
-**Activity — Terminal (dev):** Check the version.
+**Activity — Terminal (dev):** Check the version — the check records it to `/home/laborant/semgrep-version.txt`.
 
 ```bash
-# Confirm Semgrep is on the PATH
-semgrep --version
+# Confirm Semgrep is on the PATH and record the version so the lab can confirm YOU ran this
+semgrep --version | tee /home/laborant/semgrep-version.txt
 ```
 
 ::simple-task
@@ -80,7 +80,7 @@ semgrep --version
 :name: verify_semgrep_installed
 ---
 #active
-In the **Terminal (dev)** tab, run `semgrep --version` and confirm it is installed.
+In the **Terminal (dev)** tab, run `semgrep --version` and confirm it is installed — the check records it to `/home/laborant/semgrep-version.txt`.
 
 #completed
 Semgrep is installed and ready. ✓

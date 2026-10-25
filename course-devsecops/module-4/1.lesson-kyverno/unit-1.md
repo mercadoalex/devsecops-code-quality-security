@@ -66,7 +66,8 @@ This lesson tackles **K01** (insecure workload config) and **K04** (centralized 
 
 ```bash
 # The lab runs a single-node k3s cluster
-kubectl get nodes
+# tee records the node list so the lab can confirm YOU ran this step
+kubectl get nodes | tee /home/laborant/cluster-check.txt
 
 # Kyverno is pre-installed in its own namespace
 kubectl -n kyverno get pods
@@ -80,7 +81,7 @@ kubectl -n kyverno get pods
 :name: verify_cluster_ready
 ---
 #active
-Run `kubectl get nodes` and confirm the k3s node is Ready.
+Run `kubectl get nodes` and confirm the k3s node is Ready — the check records it to `/home/laborant/cluster-check.txt`.
 
 #completed
 The cluster is ready. ✓

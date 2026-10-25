@@ -66,7 +66,8 @@ We focus on **LLM01 (Prompt Injection)** and touch **LLM07 (System Prompt Leakag
 
 ```bash
 # Ollama serves models over a local HTTP API on port 11434
-curl -s http://localhost:11434/api/tags | head -c 200; echo
+# tee records the API response so the lab can confirm YOU ran this step
+curl -s http://localhost:11434/api/tags | tee /home/laborant/ollama-check.txt
 
 # Pull the small, CPU-friendly model (Apache 2.0 licensed)
 ollama pull qwen2.5:0.5b
@@ -80,7 +81,7 @@ ollama pull qwen2.5:0.5b
 :name: verify_ollama
 ---
 #active
-Confirm the Ollama API responds at `http://localhost:11434/api/tags`.
+Confirm the Ollama API responds at `http://localhost:11434/api/tags` — the check records it to `/home/laborant/ollama-check.txt`.
 
 #completed
 Ollama is serving. ✓

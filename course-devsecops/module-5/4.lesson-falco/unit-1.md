@@ -44,8 +44,9 @@ Falco's core job is **detection and alerting**, not blocking — and that's deli
 **Activity — Terminal (dev):** Check that Falco is running and tailing events.
 
 ```bash
-# Falco runs as a service in the lab
-sudo systemctl status falco --no-pager | head -n 5 || pgrep -a falco
+# Falco runs as a service in the lab — record its status so the lab can confirm YOU ran this
+sudo systemctl status falco | tee /home/laborant/falco-status.txt
+# If systemctl is unavailable, use instead:  pgrep -x falco | tee /home/laborant/falco-status.txt
 
 # Watch Falco's live output in one terminal (leave it running)
 sudo journalctl -u falco -f &
@@ -57,7 +58,7 @@ sudo journalctl -u falco -f &
 :name: verify_falco_running
 ---
 #active
-Confirm Falco is running (service active or process present).
+Confirm Falco is running (service active or process present) — the check records its status to `/home/laborant/falco-status.txt`.
 
 #completed
 Falco is watching the system. ✓

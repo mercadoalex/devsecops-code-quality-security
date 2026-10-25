@@ -34,14 +34,27 @@ tasks:
     machine: dev-machine
     user: laborant
     run: |
-      STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/)
-      if [ "${STATUS}" != "200" ]; then
-        echo "Target app not responding on port 8080"
+      # Graded on an artifact the STUDENT produces, not the ambient app state,
+      # so this task only turns green after the learner actually probes the target.
+      FILE=/home/laborant/target-check.txt
+      if [ ! -f "${FILE}" ]; then
+        echo "${FILE} not found — run the curl check in the Terminal (dev) tab"
         exit 1
       fi
-      echo "target up"
+      if ! grep -q "200" "${FILE}"; then
+        echo "${FILE} does not record a 200 response — re-run the curl check"
+        exit 1
+      fi
+      # Double-check the target really is up (the marker could be stale).
+      STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/)
+      if [ "${STATUS}" != "200" ]; then
+        echo "Target app not responding on port 8080 (got ${STATUS})"
+        exit 1
+      fi
+      echo "target up and confirmed by the student"
     hintcheck: |
-      echo "Start the target app on port 8080 before scanning."
+      echo "Run this exact command in the Terminal (dev) tab:"
+      echo "  curl -s -o /dev/null -w '%{http_code}\\n' http://localhost:8080/ | tee /home/laborant/target-check.txt"
 
   verify_zap_report:
     machine: dev-machine

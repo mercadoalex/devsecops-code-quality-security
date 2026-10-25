@@ -74,13 +74,20 @@ echo "Working tree looks clean — but history is not:"
 git log --oneline
 ```
 
+Before scanning, confirm Gitleaks is installed and record its version so the lab can confirm you ran this step:
+
+```bash
+# Record the version so the lab can confirm YOU ran this step
+gitleaks version | tee /home/laborant/gitleaks-version.txt
+```
+
 ::simple-task
 ---
 :tasks: tasks
 :name: verify_gitleaks
 ---
 #active
-Run `gitleaks version` to confirm the tool is installed.
+Run `gitleaks version` to confirm the tool is installed — the check records it to `/home/laborant/gitleaks-version.txt`.
 
 #completed
 Gitleaks is ready. ✓

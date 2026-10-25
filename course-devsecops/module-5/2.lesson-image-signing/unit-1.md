@@ -44,7 +44,8 @@ cosign supports two modes. **Keyed** uses a key pair you generate and manage —
 
 ```bash
 cd /home/laborant
-cosign version
+# Record the version so the lab can confirm YOU ran this step
+cosign version | tee /home/laborant/cosign-version.txt
 
 # Generate a key pair (set an empty password for the lab)
 COSIGN_PASSWORD="" cosign generate-key-pair
@@ -65,7 +66,7 @@ COSIGN_PASSWORD="" cosign sign --key cosign.key --yes localhost:5000/alpine:sign
 :name: verify_cosign
 ---
 #active
-Run `cosign version` to confirm the tool is installed.
+Run `cosign version` to confirm the tool is installed — the check records it to `/home/laborant/cosign-version.txt`.
 
 #completed
 cosign is ready. ✓
