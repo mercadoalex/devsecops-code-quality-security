@@ -24,7 +24,7 @@ createdAt: 2026-10-23
 updatedAt: 2026-10-23
 
 playground:
-  name: devsecops-ai-f64ca106
+  name: devsecops-ai-7fdb7fbb
 
 tasks:
   verify_model:

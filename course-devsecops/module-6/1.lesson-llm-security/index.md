@@ -24,7 +24,7 @@ tagz:
 - prompt-injection
 
 playground:
-  name: devsecops-ai-f64ca106
+  name: devsecops-ai-7fdb7fbb
 
 challenges:
   garak-llm-scan-006d06fe: {}
