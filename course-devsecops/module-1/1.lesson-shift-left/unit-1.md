@@ -97,7 +97,8 @@ On a freshly started lab, the Docker daemon takes a short while to finish bootin
 ```bash
 # Wait for the Docker daemon to be ready (first boot can take a minute or two)
 until docker info >/dev/null 2>&1; do echo "waiting for Docker..."; sleep 3; done
-echo "Docker ready ✓"
+# Write a small marker file so the lab can confirm YOU ran this step
+echo "Docker ready ✓" | tee /home/laborant/docker-ready.txt
 ```
 
 ::hint-box

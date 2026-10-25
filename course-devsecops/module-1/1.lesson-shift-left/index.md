@@ -29,16 +29,29 @@ tasks:
     machine: dev-machine
     user: laborant
     run: |
-      if ! docker info >/dev/null 2>&1; then
-        echo "Docker is not ready yet"
+      # Graded on an artifact the STUDENT produces, not the ambient daemon state,
+      # so this task only turns green after the learner actually runs the wait-loop.
+      FILE=/home/laborant/docker-ready.txt
+      if [ ! -f "${FILE}" ]; then
+        echo "${FILE} not found — run the wait-loop in the Terminal (dev) tab"
         exit 1
       fi
-      echo "Docker is ready"
-    hintcheck: |
+      if ! grep -qi "Docker ready" "${FILE}"; then
+        echo "${FILE} does not confirm Docker is ready — re-run the wait-loop"
+        exit 1
+      fi
+      # Double-check the daemon really is up (the marker could be stale).
       if ! docker info >/dev/null 2>&1; then
-        echo "Docker daemon is not responding. Try:"
-        echo "  sudo systemctl status docker"
-        echo "  sudo systemctl start docker"
+        echo "Docker daemon is not responding yet — wait a few seconds and re-run"
+        exit 1
+      fi
+      echo "Docker is ready and confirmed by the student"
+    hintcheck: |
+      echo "Run this exact block in the Terminal (dev) tab:"
+      echo "  until docker info >/dev/null 2>&1; do echo waiting...; sleep 3; done"
+      echo "  echo 'Docker ready' | tee /home/laborant/docker-ready.txt"
+      if ! docker info >/dev/null 2>&1; then
+        echo "(The daemon is still warming up — the loop will wait for it.)"
       fi
 
   verify_first_scan:
