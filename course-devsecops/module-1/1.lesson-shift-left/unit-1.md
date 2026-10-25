@@ -92,10 +92,20 @@ _The DevSecOps toolchain you will build across this course — one control at ev
 
 **Activity — Terminal (dev):** Confirm Docker is running. Everything else in this course builds on it.
 
+On a freshly started lab, the Docker daemon takes a short while to finish booting. Instead of running a bare `docker info` (which would just sit there silently until the daemon is ready), use this small wait loop — it prints "waiting..." until Docker answers, then confirms it's ready:
+
 ```bash
-# Confirm the Docker daemon is up and reachable
-docker info
+# Wait for the Docker daemon to be ready (first boot can take a minute or two)
+until docker info >/dev/null 2>&1; do echo "waiting for Docker..."; sleep 3; done
+echo "Docker ready ✓"
 ```
+
+::hint-box
+---
+:summary: Why does Docker take a minute right after the lab starts?
+---
+When your lab environment boots, several services start at once — the Docker daemon, the pre-loaded demo app, and the security tools. For the first minute or two they're all warming up, so `docker info` may pause before it responds. This is normal and happens only on a fresh start. The wait loop above simply shows "waiting..." until Docker is ready, instead of leaving you staring at a frozen prompt. Once it's up, every Docker command is instant.
+::
 
 ::simple-task
 ---
@@ -103,7 +113,7 @@ docker info
 :name: verify_docker_ready
 ---
 #active
-In the **Terminal (dev)** tab, run `docker info` and confirm the daemon responds without an error.
+In the **Terminal (dev)** tab, run the wait-loop above and confirm it prints **Docker ready ✓**.
 
 #completed
 Docker is up and reachable. ✓
