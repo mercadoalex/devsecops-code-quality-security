@@ -52,9 +52,10 @@ tasks:
         echo "${FILE} not found — run the trivy scan to create it"
         exit 1
       fi
-      # The saved output should look like a Trivy report (header or a CVE/severity line)
-      if ! grep -qiE "trivy|alpine|CVE-|CRITICAL|HIGH|MEDIUM|LOW|Total:" "${FILE}"; then
-        echo "first-scan.txt does not look like Trivy scan output"
+      # Confirm a real Trivy scan ran: the report mentions the scanned target or a
+      # vulnerability/severity line. Tolerant of empty-finding and warning output.
+      if ! grep -qiE "python:3\.9|Target|Vulnerabilit|CVE-|CRITICAL|HIGH|MEDIUM|LOW|Total:|Report Summary" "${FILE}"; then
+        echo "first-scan.txt does not look like a Trivy report — re-run the scan"
         exit 1
       fi
       echo "first scan output present"
@@ -62,7 +63,8 @@ tasks:
       if ! command -v trivy >/dev/null 2>&1; then
         echo "Trivy is not on your PATH. Check:  which trivy ; trivy --version"
       else
-        echo "Run:  trivy image --scanners vuln alpine:3.20 | tee /home/laborant/first-scan.txt"
+        echo "Run this exact command:"
+        echo "  trivy image --scanners vuln python:3.9-slim > /home/laborant/first-scan.txt 2>&1"
       fi
 
   verify_manifesto_file:

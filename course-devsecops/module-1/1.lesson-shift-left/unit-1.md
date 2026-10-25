@@ -117,16 +117,55 @@ Docker is up and reachable. ✓
 
 No slow build-up here — let's *do* security in your very first lesson. You'll scan a real container image and watch Trivy report actual findings.
 
-**Activity — Terminal (dev):** Scan a small base image and save the result. (First run downloads the vulnerability database — give it a moment.)
+**Activity — Terminal (dev):** Scan a container image that actually has known vulnerabilities and save the result. (First run downloads the vulnerability database — give it a moment.)
 
 ```bash
-# Scan a small image; Trivy downloads its vuln DB on first run, then reports findings
-trivy image --scanners vuln alpine:3.20 | tee /home/laborant/first-scan.txt
+# Scan an older image that reliably has known CVEs, so you see real findings.
+# --scanners vuln = vulnerabilities only. The report is saved to a file.
+trivy image --scanners vuln python:3.9-slim > /home/laborant/first-scan.txt 2>&1
+
+# Show the summary so you can see the findings on screen too:
+cat /home/laborant/first-scan.txt
 ```
 
 > ⏱️ The first scan downloads the vulnerability database and can take 30–60 seconds.
 
-When it finishes you'll see a table of any known vulnerabilities in that image, grouped by severity. That's it — you just ran a real security control.
+When it finishes you'll see a table of known vulnerabilities grouped by severity (CRITICAL / HIGH / MEDIUM / LOW). That's it — you just ran a real security control and got real results.
+
+::hint-box
+---
+:summary: Why this image and not something newer/smaller?
+---
+We deliberately scan an older image (`python:3.9-slim`) because it reliably contains known CVEs — so your first scan actually *shows findings* instead of an empty report. A freshly updated tiny image often has zero known vulnerabilities, which is reassuring in production but makes for a boring first lesson. Seeing real findings is the point here.
+::
+
+Your output will look something like the table below. Don't worry about reading every line — just notice the **shape** of it.
+
+::image-box
+---
+:src: __static__/report-summary-v1.png
+:alt: A Trivy vulnerability scan report in the terminal — a Report Summary table listing the scanned target and the number of vulnerabilities found, followed by a detailed table with columns for Library (the affected package), Vulnerability (the CVE ID), Severity (CRITICAL, HIGH, MEDIUM, LOW), Installed Version, Fixed Version, and Title describing each issue
+:max-width: 860px
+---
+_A Trivy report: each row is one known vulnerability in the image. The columns that matter most are the **Severity** (how serious) and the **Fixed Version** (upgrade to this to resolve it)._
+::
+
+How to read it at a glance:
+
+| Column | What it tells you |
+|---|---|
+| **Library** | The package inside the image that is affected |
+| **Vulnerability** | The CVE identifier (a public ID for that specific flaw) |
+| **Severity** | How serious — CRITICAL, HIGH, MEDIUM, or LOW |
+| **Installed Version** | The vulnerable version currently in the image |
+| **Fixed Version** | The version to upgrade to in order to fix it (blank = no fix yet) |
+
+::hint-box
+---
+:summary: That's a lot of rows — do I have to fix all of them right now?
+---
+No. Right now you're just learning to *read* a scan. In **Unit 3** you'll learn how to triage this: focus on CRITICAL/HIGH findings that have a **Fixed Version** available (those you can act on), turn the scan into a build gate, and remediate by upgrading the base image. For this lesson, simply seeing the table is the win.
+::
 
 ::hint-box
 ---
