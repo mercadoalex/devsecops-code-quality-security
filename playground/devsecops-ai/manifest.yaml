@@ -1,0 +1,81 @@
+kind: playground
+
+# DevSecOps AI playground — built on the official `docker` base (Docker +
+# examiner + python3) and layered with Ollama + Garak via initTasks. REPLACES
+# the old custom OCI rootfs image (which lacked the examiner, so tasks never
+# graded). CPU-only; the Garak scan in the lesson is deferred (background).
+#
+# Build procedure:
+#   labctl playground create devsecops-ai --base docker -q         # prints suffixed name
+#   labctl playground update <suffixed-name> -f playground/devsecops-ai/manifest.yaml
+#   labctl playground start  <suffixed-name>
+#   labctl playground tasks  <suffixed-name>
+#
+# The NEW suffixed name must replace the old devsecops-ai-f64ca106 in the
+# Module 6 lesson/challenge `playground.name`.
+
+name: devsecops-ai
+
+title: DevSecOps — AI / LLM Security
+
+description: |
+  Ollama serving a small local model (qwen2.5:0.5b) plus the Garak LLM
+  vulnerability scanner, installed at boot. Used for prompt-injection testing
+  and the OWASP LLM Top 10. CPU-only; the Garak scan is deferred.
+
+categories:
+  - security
+  - programming
+
+playground:
+  tabs:
+    - kind: ide
+      machine: dev-machine
+    - kind: terminal
+      name: Terminal (dev)
+      machine: dev-machine
+    - kind: terminal
+      name: Terminal (ollama)
+      machine: dev-machine
+    - kind: http-port
+      name: Ollama API
+      machine: dev-machine
+      number: 11434
+      target: window
+
+  initTasks:
+    # Install Ollama + pull the small model + install Garak (CPU-only torch).
+    # This is heavier than other playgrounds (model pull ~400 MB), so the budget
+    # is generous. Runs on dev-machine as laborant.
+    init_ai_tools:
+      init: true
+      machine: dev-machine
+      user: laborant
+      timeout_seconds: 900
+      run: |
+        set +e
+        # --- Ollama ---
+        if ! command -v ollama >/dev/null 2>&1; then
+          curl -fsSL https://ollama.com/install.sh | sh
+        fi
+        sudo systemctl enable --now ollama 2>/dev/null || (nohup ollama serve >/tmp/ollama.log 2>&1 &)
+        # wait for the API, then pull the small model
+        for i in $(seq 1 30); do curl -fsS http://localhost:11434/api/tags >/dev/null 2>&1 && break || sleep 2; done
+        ollama pull qwen2.5:0.5b || echo "WARN: model pull failed"
+        # --- Garak with CPU-only torch (avoid multi-GB CUDA wheels) ---
+        command -v pipx >/dev/null 2>&1 || { sudo apt-get update && sudo apt-get install -y pipx python3-venv; }
+        export PATH="$HOME/.local/bin:$PATH"
+        pipx ensurepath >/dev/null 2>&1 || true
+        grep -q '.local/bin' "$HOME/.bashrc" 2>/dev/null || echo 'export PATH=$HOME/.local/bin:$PATH' >> "$HOME/.bashrc"
+        pipx install garak 2>/dev/null || pipx upgrade garak || true
+        pipx runpip garak uninstall -y torch torchvision torchaudio 2>/dev/null || true
+        pipx runpip garak install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu torch 2>/dev/null || true
+        echo "ai tools installed (ollama + qwen2.5:0.5b + garak)"
+
+  accessControl:
+    canList:
+      - owner
+    canRead:
+      - anyone
+    canStart:
+      - anyone      # change to: student:<training-name> for a paid cohort

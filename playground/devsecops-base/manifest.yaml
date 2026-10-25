@@ -1,0 +1,146 @@
+kind: playground
+
+# DevSecOps BASE playground — built on the official `docker` base (which ships
+# Docker + the iximiuz examiner task engine) and layered with our tools via
+# initTasks. This REPLACES the old custom OCI rootfs image: a from-scratch rootfs
+# did not include the examiner, so task verification never ran. Using an official
+# base is the proven pattern (same as the Rancher course and our k8s playground).
+#
+# Build procedure:
+#   labctl playground create devsecops-base --base docker -q        # prints suffixed name
+#   labctl playground update <suffixed-name> -f playground/devsecops-base/manifest.yaml
+#   labctl playground start  <suffixed-name>
+#   labctl playground tasks  <suffixed-name>                        # watch init tasks
+#
+# NOTE: `name` gets a unique suffix on creation. The CURRENT live name
+# (devsecops-base-c07e1a31) is the OLD custom-image playground; creating this one
+# yields a NEW suffixed name that must replace devsecops-base-c07e1a31 in every
+# base-playground lesson/challenge `playground.name`.
+
+name: devsecops-base
+
+title: DevSecOps — Base Toolchain
+
+description: |
+  Docker plus the DevSecOps toolchain (Trivy, Semgrep, Gitleaks, cosign, Checkov,
+  OpenTofu) installed at boot, with a deliberately-vulnerable demo app on :8080.
+  Used for the foundations, SAST, container-scanning, secret-scanning and DAST
+  lessons.
+
+categories:
+  - security
+  - ci-cd
+
+playground:
+  tabs:
+    - kind: ide
+      machine: dev-machine
+    - kind: terminal
+      name: Terminal (dev)
+      machine: dev-machine
+    - kind: http-port
+      name: Demo App
+      machine: dev-machine
+      number: 8080
+      target: window
+
+  initTasks:
+    # Install the DevSecOps CLIs the lessons use. The official `docker` base has
+    # Docker + examiner + python3; we add the security tools. Each tool is guarded
+    # so one failure never blocks the others. Runs on dev-machine as laborant.
+    init_tools:
+      init: true
+      machine: dev-machine
+      user: laborant
+      timeout_seconds: 600
+      run: |
+        set +e
+        BIN=/usr/local/bin
+        # --- Trivy (CVE + SBOM + config) ---
+        command -v trivy >/dev/null 2>&1 || {
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh \
+            | sudo sh -s -- -b "$BIN"; }
+        trivy image --download-db-only 2>/dev/null || true
+        # --- Gitleaks ---
+        command -v gitleaks >/dev/null 2>&1 || {
+          GL=8.21.2
+          curl -fsSL -o /tmp/gl.tgz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GL}/gitleaks_${GL}_linux_x64.tar.gz" \
+            && sudo tar -xzf /tmp/gl.tgz -C "$BIN" gitleaks && sudo chmod +x "$BIN/gitleaks"; }
+        # --- cosign ---
+        command -v cosign >/dev/null 2>&1 || {
+          sudo curl -fsSL -o "$BIN/cosign" \
+            https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64 \
+            && sudo chmod +x "$BIN/cosign"; }
+        # --- OpenTofu ---
+        command -v tofu >/dev/null 2>&1 || {
+          TF=1.8.5
+          curl -fsSL -o /tmp/tofu.zip \
+            "https://github.com/opentofu/opentofu/releases/download/v${TF}/tofu_${TF}_linux_amd64.zip" \
+            && unzip -o /tmp/tofu.zip -d /tmp/tofu && sudo install -m 0755 /tmp/tofu/tofu "$BIN/tofu"; }
+        # --- pipx tools: Semgrep (SAST), Checkov (IaC), moto/prowler/awscli (IaC runtime) ---
+        command -v pipx >/dev/null 2>&1 || { sudo apt-get update && sudo apt-get install -y pipx python3-venv; }
+        export PATH="$HOME/.local/bin:$PATH"
+        pipx ensurepath >/dev/null 2>&1 || true
+        grep -q '.local/bin' "$HOME/.bashrc" 2>/dev/null || echo 'export PATH=$HOME/.local/bin:$PATH' >> "$HOME/.bashrc"
+        for p in semgrep checkov "moto[server]" prowler awscli; do
+          pipx install "$p" 2>/dev/null || pipx upgrade "${p%%[*}" 2>/dev/null || true
+        done
+        echo "tools installed"
+
+    # Build + run the deliberately-vulnerable demo app on :8080 for the OWASP
+    # and ZAP lessons. Source is written inline (no external image).
+    init_vuln_app:
+      init: true
+      machine: dev-machine
+      user: laborant
+      needs:
+        - init_tools
+      timeout_seconds: 300
+      run: |
+        set +e
+        mkdir -p /home/laborant/vuln-app
+        cat > /home/laborant/vuln-app/app.py <<'PY'
+        import os, sqlite3
+        from http.server import BaseHTTPRequestHandler, HTTPServer
+        from urllib.parse import urlparse, parse_qs
+        MODE = os.environ.get("APP_MODE", "vuln")
+        DB = sqlite3.connect(":memory:", check_same_thread=False)
+        DB.execute("CREATE TABLE users(user TEXT, pass TEXT, token TEXT)")
+        DB.execute("INSERT INTO users VALUES('admin','s3cr3t','ADMIN-TOKEN-7f3a')")
+        DB.commit()
+        class H(BaseHTTPRequestHandler):
+            def log_message(self,*a): pass
+            def _s(self,c,b): self.send_response(c); self.send_header("Content-Type","text/html"); self.end_headers(); self.wfile.write(b.encode())
+            def do_GET(self):
+                p=urlparse(self.path)
+                if p.path=="/":
+                    self._s(200,"<html><body><h1>Demo App</h1><form action='/login'><input name='user'><input name='pass' type='password'><button>Login</button></form></body></html>"); return
+                if p.path=="/login":
+                    q=parse_qs(p.query); u=q.get("user",[""])[0]; pw=q.get("pass",[""])[0]
+                    try:
+                        if MODE=="patched":
+                            r=DB.execute("SELECT token FROM users WHERE user=? AND pass=?",(u,pw)).fetchone()
+                        else:
+                            r=DB.execute("SELECT token FROM users WHERE user='"+u+"' AND pass='"+pw+"'").fetchone()
+                    except Exception as e:
+                        self._s(200,"login error: %s"%e); return
+                    self._s(200,("welcome — login success, token=%s"%r[0]) if r else "login failed"); return
+                self._s(404,"not found")
+        HTTPServer(("0.0.0.0",int(os.environ.get("PORT","80"))),H).serve_forever()
+        PY
+        printf 'FROM python:3.12-slim\nWORKDIR /app\nCOPY app.py .\nENV APP_MODE=vuln\nENV PORT=80\nEXPOSE 80\nCMD ["python","app.py"]\n' \
+          > /home/laborant/vuln-app/Dockerfile
+        docker build -t vuln-app:latest /home/laborant/vuln-app || echo "WARN: vuln-app build failed"
+        docker rm -f demo-app >/dev/null 2>&1 || true
+        docker run -d --restart=always --name demo-app -e APP_MODE=vuln -p 8080:80 vuln-app:latest \
+          || echo "WARN: demo-app run failed"
+        echo "vuln-app on :8080"
+
+  accessControl:
+    canList:
+      - owner
+    canRead:
+      - anyone
+    canStart:
+      - anyone      # change to: student:<training-name> for a paid cohort
