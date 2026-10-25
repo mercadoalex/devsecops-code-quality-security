@@ -127,18 +127,22 @@ Docker is up and reachable. ✓
 
 No slow build-up here — let's *do* security in your very first lesson. You'll scan a real container image and watch Trivy report actual findings.
 
-**Activity — Terminal (dev):** Scan a container image that actually has known vulnerabilities and save the result. (First run downloads the vulnerability database — give it a moment.)
+**Activity — Terminal (dev):** Scan a container image that actually has known vulnerabilities and save the result.
+
+The very first scan downloads Trivy's vulnerability database (a one-time step), so expect the terminal to pause quietly for 30–60 seconds before results appear. That pause is normal — it's not stuck.
 
 ```bash
 # Scan an older image that reliably has known CVEs, so you see real findings.
 # --scanners vuln = vulnerabilities only. The report is saved to a file.
+echo "Scanning (first run downloads the vuln DB — this can take ~30-60s)..."
 trivy image --scanners vuln python:3.9-slim > /home/laborant/first-scan.txt 2>&1
+echo "Scan complete — results saved. Showing them now:"
 
-# Show the summary so you can see the findings on screen too:
+# Show the findings on screen:
 cat /home/laborant/first-scan.txt
 ```
 
-> ⏱️ The first scan downloads the vulnerability database and can take 30–60 seconds.
+> ⏱️ The first scan downloads the vulnerability database and can take 30–60 seconds. Subsequent scans are fast because the database is cached.
 
 When it finishes you'll see a table of known vulnerabilities grouped by severity (CRITICAL / HIGH / MEDIUM / LOW). That's it — you just ran a real security control and got real results.
 
